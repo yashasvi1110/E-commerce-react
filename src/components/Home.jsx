@@ -14,7 +14,7 @@ const Home = () => {
     return (
         <>
             <Hero />
-            <Featured />
+           
             <Fruits />
             <Service />
             <Vegetables />
