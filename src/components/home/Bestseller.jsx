@@ -6,36 +6,36 @@ import { addToCart } from '../../redux/CartSlice';
 const Bestseller = () => {
     const dispatch = useDispatch();
     return (
-        <div className='mt-40'>
-            <div className='lg:mx-20 '>
-                <h1 className='text-3xl md:text-5xl xl:text-6xl font-bold mx-auto text-center' style={{color: '#45595b'}}>Bestseller Products</h1>
-                <p className='mx-4 text-center mt-4 w-auto ' style={{color: '#45595b'}}>Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.</p>
-                <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'>
-                    {bsetseller.map((val) => {
-                        return (
-                            <div key={val.id} className='flex justify-evenly items-center mt-8 mx-4 sm:mx-20 py-8 md:justify-around md:mx-32 lg:mx-4 ' style={{backgroundColor: '#f4f6f8'}}>
-                                <div className='img-sell lg:ml-12 xl:ml-2'>
-                                    <img className='w-full h-full img-best' src={val.img} alt="" />
-                                </div>
-                                <div className=''>
-                                    <h5 className='py-2 mb-4 text-lg font-semibold w-20' style={{color: '#45595b'}}>{val.name}</h5>
-                                    <ul className='flex my-3'>
-                                        <li style={{color: '#81c408'}}>{val.star}</li>
-                                        <li style={{color: '#81c408'}}>{val.star}</li>
-                                        <li style={{color: '#81c408'}}>{val.star}</li>
-                                        <li style={{color: '#81c408'}}>{val.star}</li>
-                                        <li style={{color: '#45595b'}}>{val.star}</li>
-                                    </ul>
-                                    <p className='text-lg font-semibold ' style={{color: '#45595b'}}>${val.price} / Kg</p>
-                                    <div className='border rounded-full border-orange-400 mt-6 py-2 px-4 lg:pr-2 '>
-                                        <span className='pr-4 lg:pr-1 ' style={{color: '#81c408'}}>{val.icon}</span>
-                                        <button onClick={() => dispatch(addToCart(val))} className='font-semibold' style={{color: '#81c408'}}>{val.cart}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
+        <div className='mt-10 container mx-auto'>
+            <div className='flex flex-col mb-6 mx-2 md:mx-8'>
+                <h1 className='text-2xl font-bold mb-4 text-center' style={{color: '#45595b'}}>Bestseller Products</h1>
+                <p className='text-sm text-center mb-4 text-gray-500'>Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.</p>
+            </div>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 md:px-8'>
+                {bsetseller.map((val) => (
+                    <div key={val.id} className='bg-white rounded-xl shadow p-2 flex flex-col items-center min-h-[270px]'>
+                        <div className='w-full h-28 flex items-center justify-center overflow-hidden rounded-lg'>
+                            <img src={val.img} alt={val.name} className='object-cover w-full h-full'/>
+                        </div>
+                        <span className='mt-2 text-xs font-semibold text-yellow-500'>Bestseller</span>
+                        <h3 className='text-base font-bold mt-1 mb-1 text-center'>{val.name}</h3>
+                        <ul className='flex my-1 justify-center'>
+                            {[...Array(4)].map((_, i) => (
+                                <li key={i} style={{color: '#81c408'}}>{val.star}</li>
+                            ))}
+                            <li style={{color: '#45595b'}}>{val.star}</li>
+                        </ul>
+                        <p className='text-xs text-gray-500 text-center mb-2'>${val.price} / Kg</p>
+                        <div className='flex items-center justify-between w-full mt-auto'>
+                            <button
+                                onClick={() => dispatch(addToCart(val))}
+                                className='bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold flex items-center w-full justify-center active:scale-95 transition-transform duration-100'
+                            >
+                                <i className='fa fa-shopping-bag mr-1'></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     )

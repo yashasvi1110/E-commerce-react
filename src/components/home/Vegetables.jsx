@@ -6,32 +6,30 @@ import { addToCart } from '../../redux/CartSlice';
 const Vegetables = () => {
     const dispatch = useDispatch();
     return (
-        <div className='mt-40 container ml-auto mr-auto'>
-            <div className='flex flex-col mb-10 mx-4 md:mx-20 lg:flex lg:justify-between lg:flex-row lg:mx-10 lg:gap-10'>
-                <h1 className='text-3xl font-semibold mb-6 lg:text-4xl lg:flex lg:justify-center lg:items-center' style={{color: '#45595b'}}>Fresh Organic Vegetables</h1>
+        <div className='mt-10 container mx-auto'>
+            <div className='flex flex-col mb-6 mx-2 md:mx-8'>
+                <h1 className='text-2xl font-bold mb-4 text-center' style={{color: '#45595b'}}>Fresh Organic Vegetables</h1>
             </div>
-            <div className='mx-4 sm:mx-20 md:grid md:grid-cols-2 md:gap-4 lg:mx-10 lg:grid-cols-3 xl:grid-cols-4 '>
-                {vegetables.map((val) => {
-                    return (
-                        <div key={val.id} className='box border rounded-lg border-orange-400 mx-auto mb-6 w-full'>
-                            <div className='w-full relative overflow-clip'>
-                                <img className='hover:scale-150 duration-500 w-full rounded-lg' src={val.img} alt="" />
-                                <span className='absolute top-3 right-3 text-white text-lg py-1 px-4 rounded-xl' style={{backgroundColor: '#81c408'}}>Vegetables</span>
-                            </div>
-                            <div className='text-center'>
-                                <h3 className='text-2xl mt-5 font-semibold' style={{color: '#45595b'}}>{val.name}</h3>
-                                <p className='leading-normal font-normal my-4 w-10/12 mx-auto' style={{color: '#020e1ccf'}}>{val.desc}</p>
-                            </div>
-                            <div className='flex justify-between items-center mb-8 mx-6 xl:mx-3'>
-                                <p className='font-semibold text-lg' style={{color: '#0c363b'}}>${val.price} / Kg</p>
-                                <div className='border rounded-full border-orange-400 py-2 px-4 lg:px-2 '>
-                                    <span className='pr-4 lg:pr-1 ' style={{color: '#81c408'}}>{val.icon}</span>
-                                    <button onClick={() => dispatch(addToCart(val))} className='font-semibold' style={{color: '#81c408'}}>{val.cart}</button>
-                                </div>
-                            </div>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 md:px-8'>
+                {vegetables.map((val) => (
+                    <div key={val.id} className='bg-white rounded-xl shadow p-2 flex flex-col items-center min-h-[270px]'>
+                        <div className='w-full h-28 flex items-center justify-center overflow-hidden rounded-lg'>
+                            <img src={val.img} alt={val.name} className='object-cover w-full h-full'/>
                         </div>
-                    )
-                })}
+                        <span className='mt-2 text-xs font-semibold text-green-600'>Vegetables</span>
+                        <h3 className='text-base font-bold mt-1 mb-1 text-center'>{val.name}</h3>
+                        <p className='text-xs text-gray-500 text-center mb-2'>{val.desc}</p>
+                        <div className='flex items-center justify-between w-full mt-auto'>
+                            <span className='text-sm font-bold text-green-700'>${val.price}</span>
+                            <button
+                                onClick={() => dispatch(addToCart(val))}
+                                className='bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold flex items-center ml-2 active:scale-95 transition-transform duration-100'
+                            >
+                                <i className='fa fa-shopping-bag mr-1'></i> Add
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     )

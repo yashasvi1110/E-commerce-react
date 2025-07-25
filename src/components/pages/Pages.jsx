@@ -17,7 +17,7 @@ import Error from '../Error';
 import Contact from '../Contact';
 import Cart from '../Cart';
 import Checkout from '../Checkout';
-
+import BottomCartBar from '../common/BottomCartBar';
 
 const Pages = () => {
     return (
@@ -34,6 +34,7 @@ const Pages = () => {
                     <Route path="/error" element={<Error />}></Route>
                     <Route path="/contact" element={<Contact />}></Route>
                 </Routes>
+                <BottomCartBar />
                 <Footer />
             </Router>
         </>
