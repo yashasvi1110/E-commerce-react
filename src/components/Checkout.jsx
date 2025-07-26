@@ -3,6 +3,7 @@ import Back from './common/Back'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import LastMinuteBuy from './LastMinuteBuy';
+import Subscribe from './subscribe';
 import { addToCart, removeFromCart } from '../redux/CartSlice';
 
 const Checkout = () => {
@@ -543,7 +544,7 @@ const Checkout = () => {
                         </div>
                         
                         {/* Order Summary - Mobile Optimized */}
-                        <div ref={orderSummaryRef} className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <div ref={orderSummaryRef} className="relative overflow-x-auto shadow-md sm:rounded-lg mb-6">
                             <div className="bg-white rounded-lg p-4 lg:p-6">
                                 <h3 className="text-lg lg:text-xl font-bold text-gray-800 mb-4">Order Summary</h3>
                                 
@@ -621,6 +622,12 @@ const Checkout = () => {
                                     )}
                                 </button>
                             </div>
+                        </div>
+
+                        {/* Subscribe Section - Right after Order Summary */}
+                        <div className="bg-white rounded-lg shadow-md p-4">
+                            <h3 className="text-lg lg:text-xl font-bold text-gray-800 mb-4">Subscribe for Regular Deliveries</h3>
+                            <Subscribe />
                         </div>
                     </div>
                 </div>
