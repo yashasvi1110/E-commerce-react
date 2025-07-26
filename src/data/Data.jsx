@@ -1,3 +1,6 @@
+// Import JSON data
+import productData from './products.json';
+
 export const featured = [
     {
         id: '1',
@@ -322,91 +325,6 @@ export const shop_feature = [
     },
 ]
 
-export const categories = [
-  {
-    id: 'fruits',
-    name: 'Fruits',
-    subcategories: [
-      { id: 'seasonal', name: 'Seasonal' },
-      { id: 'exotic', name: 'Exotic' }
-    ]
-  },
-  {
-    id: 'vegetables',
-    name: 'Vegetables',
-    subcategories: [
-      { id: 'hydroponic', name: 'Hydroponic' },
-      { id: 'flower', name: 'Flower & Leaves' },
-      { id: 'coriander', name: 'Coriander' }
-    ]
-  }
-];
-
-// Helper to generate random product data
-const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const fruitImages = [
-  '../img/fruite-item-1.jpg', '../img/fruite-item-2.jpg', '../img/fruite-item-3.jpg', '../img/fruite-item-4.jpg', '../img/fruite-item-5.jpg', '../img/fruite-item-6.jpg'
-];
-const vegImages = [
-  '../img/vegetable-item-1.jpg', '../img/vegetable-item-2.jpg', '../img/vegetable-item-3.png', '../img/vegetable-item-4.jpg', '../img/vegetable-item-5.jpg', '../img/vegetable-item-6.jpg'
-];
-const tags = ['Buy Again', 'Bestseller', 'New', 'Limited', ''];
-const descs = ['Sweet & Spot Free', 'Fresh & Juicy', 'Organic', 'Crisp & Tasty', 'Rich in Vitamins'];
-const units = ['3 Pcs (400-450g)', '500g', '1 Kg', '6 Pcs', '4 Pcs (400-450g)'];
-const deliveryTimes = ['6 mins', '10 mins', '12 mins', '8 mins', '15 mins'];
-
-let id = 1;
-const makeProduct = (name, category, subcategory, imgArr) => {
-  const price = +(Math.random() * 100 + 10).toFixed(0);
-  const mrp = price + random([10, 20, 30, 40]);
-  const save = mrp - price;
-  return {
-    id: id++,
-    name,
-    category,
-    subcategory,
-    price,
-    mrp,
-    unit: random(units),
-    save,
-    tag: random(tags),
-    description: random(descs),
-    rating: +(Math.random() * 1.5 + 3.5).toFixed(1),
-    ratingCount: Math.floor(Math.random() * 9000 + 1000),
-    deliveryTime: random(deliveryTimes),
-    img: random(imgArr)
-  };
-};
-
-const fruitNames = [
-  'Apple', 'Mango', 'Orange', 'Grapes', 'Banana', 'Dragon Fruit', 'Kiwi', 'Rambutan', 'Passion Fruit', 'Mangosteen',
-  'Pineapple', 'Papaya', 'Guava', 'Lychee', 'Peach', 'Plum', 'Pear', 'Cherry', 'Blueberry', 'Strawberry',
-  'Watermelon', 'Melon', 'Avocado', 'Fig', 'Pomegranate', 'Apricot', 'Blackberry', 'Cranberry', 'Date', 'Jackfruit',
-  'Longan', 'Mulberry', 'Nectarine', 'Olive', 'Persimmon', 'Quince', 'Raspberry', 'Sapodilla', 'Starfruit', 'Tamarind',
-  'Coconut', 'Custard Apple', 'Jujube', 'Loquat', 'Medlar', 'Miracle Fruit', 'Salak', 'Soursop', 'Sugar Apple', 'Ugli Fruit'
-];
-const vegNames = [
-  'Hydroponic Lettuce', 'Hydroponic Spinach', 'Hydroponic Kale', 'Hydroponic Basil', 'Hydroponic Arugula',
-  'Spinach', 'Broccoli', 'Cauliflower', 'Cabbage', 'Mustard Greens',
-  'Coriander Leaves', 'Parsley', 'Dill', 'Chervil', 'Celery Leaves',
-  'Carrot', 'Beetroot', 'Radish', 'Turnip', 'Onion',
-  'Potato', 'Tomato', 'Eggplant', 'Zucchini', 'Pumpkin',
-  'Sweet Potato', 'Yam', 'Okra', 'Peas', 'Green Beans',
-  'Bell Pepper', 'Chili', 'Cucumber', 'Leek', 'Garlic',
-  'Ginger', 'Fennel', 'Artichoke', 'Asparagus', 'Bok Choy',
-  'Brussels Sprout', 'Celeriac', 'Chicory', 'Collard Greens', 'Endive',
-  'Kohlrabi', 'Parsnip', 'Rutabaga', 'Shallot', 'Swiss Chard', 'Turnip Greens'
-];
-
-export const products = [
-  // Fruits - Seasonal (first 25)
-  ...fruitNames.slice(0, 25).map(name => makeProduct(name, 'fruits', 'seasonal', fruitImages)),
-  // Fruits - Exotic (next 25)
-  ...fruitNames.slice(25, 50).map(name => makeProduct(name, 'fruits', 'exotic', fruitImages)),
-  // Vegetables - Hydroponic (first 17)
-  ...vegNames.slice(0, 17).map(name => makeProduct(name, 'vegetables', 'hydroponic', vegImages)),
-  // Vegetables - Flower & Leaves (next 17)
-  ...vegNames.slice(17, 34).map(name => makeProduct(name, 'vegetables', 'flower', vegImages)),
-  // Vegetables - Coriander (last 16)
-  ...vegNames.slice(34, 50).map(name => makeProduct(name, 'vegetables', 'coriander', vegImages)),
-];
+// Use JSON data instead of generated data
+export const categories = productData.categories;
+export const products = productData.products;

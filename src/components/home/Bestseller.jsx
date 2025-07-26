@@ -6,7 +6,7 @@ import { addToCart } from '../../redux/CartSlice';
 const Bestseller = () => {
     const dispatch = useDispatch();
     return (
-        <div className='mt-10 container mx-auto'>
+        <div id="bestseller-section" className='mt-10 container mx-auto'>
             <div className='flex flex-col mb-6 mx-2 md:mx-8'>
                 <h1 className='text-2xl font-bold mb-4 text-center' style={{color: '#45595b'}}>Bestseller Products</h1>
                 <p className='text-sm text-center mb-4 text-gray-500'>Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.</p>
