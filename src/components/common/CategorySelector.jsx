@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { categories, products } from '../../data/Data';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/CartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart } from '../../redux/CartSlice';
 
 const CategorySelector = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -10,6 +10,7 @@ const CategorySelector = () => {
   const [cardsToShow, setCardsToShow] = useState(9); // 3 rows × 3 cards = 9 cards initially
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cartItems = useSelector(state => state.cart.items);
 
   // Filter products by selected category and subcategory
   const filteredProducts = products.filter(p =>
@@ -124,12 +125,39 @@ const CategorySelector = () => {
                     {/* Product image */}
                     <div className="w-full h-24 flex items-center justify-center overflow-hidden rounded-lg mb-1 relative">
                       <img className="object-cover w-full h-full rounded-lg" src={product.img} alt={product.name} />
-                      <button
-                        className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white border-2 border-pink-400 text-pink-500 font-bold px-8 py-1 rounded-xl shadow active:scale-95 transition-transform duration-100 group-hover:bg-pink-50"
-                        onClick={() => dispatch(addToCart(product))}
-                      >
-                        ADD
-                      </button>
+                      
+                      {/* Quantity controls or ADD button */}
+                      {(() => {
+                        const cartItem = cartItems.find(item => item.id === product.id);
+                        if (cartItem) {
+                          return (
+                            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white border-2 border-pink-400 rounded-xl shadow flex items-center px-2 py-1">
+                              <button
+                                className="text-pink-500 font-bold px-2 py-1 rounded-full hover:bg-pink-50 active:scale-95 transition-transform duration-100"
+                                onClick={() => dispatch(removeFromCart(product))}
+                              >
+                                <i className="fa fa-minus text-xs"></i>
+                              </button>
+                              <span className="text-pink-500 font-bold px-2 text-sm">{cartItem.quantity}</span>
+                              <button
+                                className="text-pink-500 font-bold px-2 py-1 rounded-full hover:bg-pink-50 active:scale-95 transition-transform duration-100"
+                                onClick={() => dispatch(addToCart(product))}
+                              >
+                                <i className="fa fa-plus text-xs"></i>
+                              </button>
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <button
+                              className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white border-2 border-pink-400 text-pink-500 font-bold px-8 py-1 rounded-xl shadow active:scale-95 transition-transform duration-100 group-hover:bg-pink-50"
+                              onClick={() => dispatch(addToCart(product))}
+                            >
+                              ADD
+                            </button>
+                          );
+                        }
+                      })()}
                     </div>
                     
                     {/* Price, MRP, Save */}
