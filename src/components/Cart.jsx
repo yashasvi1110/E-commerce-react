@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart,  removeFromCart ,clearItem ,clearCart  } from '../redux/CartSlice';
 import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const dispatch = useDispatch();
     const items = useSelector(state => state.cart.items);
     const subtotal = useSelector(state => state.cart.subtotal);
