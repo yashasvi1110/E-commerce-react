@@ -1,12 +1,14 @@
 import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart,  removeFromCart ,clearItem ,clearCart  } from '../redux/CartSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
     const dispatch = useDispatch();
     const items = useSelector(state => state.cart.items);
     const subtotal = useSelector(state => state.cart.subtotal);
     const total = useSelector(state => state.cart.total);
+    const navigate = useNavigate();
 
     const emptyCartMsg = (
         <h4 className="container mx-auto text-center py-4 text-2xl font-semibold" style={{color: '#45595b'}}>Your Cart is Empty</h4>
@@ -55,7 +57,7 @@ export default function Cart() {
                         <h2 className="font-semibold text-lg">Total</h2>
                         <span>${(total + 3).toFixed(2)}</span>
                     </div>
-                    <button className="w-full px-6 py-3 font-semibold mt-4 border border-orange-400 rounded-full uppercase duration-500 checkout bg-orange-400" style={{color: '#fff'}}>Proceed Checkout</button>
+                    <button onClick={() => navigate('/checkout')} className="w-full px-6 py-3 font-semibold mt-4 border border-orange-400 rounded-full uppercase duration-500 checkout bg-orange-400" style={{color: '#fff'}}>Proceed Checkout</button>
                 </div>
             </div>
         )} 

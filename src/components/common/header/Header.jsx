@@ -37,6 +37,7 @@ const Header = () => {
                         <Link to='/checkout' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-credit-card mr-2"></i>Checkout</Link>
                         <Link to='/testimonial' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-comment mr-2"></i>Testimonial</Link>
                         <Link to='/contact' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-envelope mr-2"></i>Contact</Link>
+                        <Link to='/profile' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-user mr-2"></i>Profile</Link>
                     </div>
                     {/* Click outside to close */}
                     <div className="flex-1" onClick={()=> setBar(false)}></div>

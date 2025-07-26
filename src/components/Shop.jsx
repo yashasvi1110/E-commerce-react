@@ -4,6 +4,7 @@ import { shop_feature ,fruits } from '../data/Data'
 import Slider from '@mui/material/Slider';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/CartSlice';
+import Subscribe from './subscribe';
 
 const Shop = () => {
     const dispatch = useDispatch();
@@ -149,6 +150,7 @@ const Shop = () => {
                 <li className='py-2 px-4 mx-1 border border-orange-400 rounded-lg' style={{color: '#45595b'}}>5</li>
                 <li className='py-2 px-4 mx-1 border border-orange-400 rounded-lg' style={{color: '#45595b'}}>&#8658;</li>
             </ul>
+            <Subscribe />
         </div>
     )
 }
