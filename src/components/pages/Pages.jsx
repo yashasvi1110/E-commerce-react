@@ -1,10 +1,8 @@
 import React from 'react'
 import {
     BrowserRouter as Router,
-    // Switch,
     Route,
     Routes,
-    // Link
 } from "react-router-dom";
 import Header from '../common/header/Header'
 import Home from '../Home';
@@ -20,6 +18,11 @@ import Checkout from '../Checkout';
 import SearchResults from '../SearchResults';
 import LightningDeals from '../LightningDeals';
 import BottomCartBar from '../common/BottomCartBar';
+import Login from '../auth/Login';
+import Signup from '../auth/Signup';
+import UserProfile from '../profile/UserProfile';
+import AdminOrders from '../AdminOrders';
+import OrderSuccess from '../OrderSuccess';
 
 const Pages = () => {
     return (
@@ -37,6 +40,11 @@ const Pages = () => {
                             <Route path="/checkout" element={<Checkout />}></Route>
                             <Route path="/search" element={<SearchResults />}></Route>
                             <Route path="/lightning-deals" element={<LightningDeals />}></Route>
+                            <Route path="/login" element={<Login />}></Route>
+                            <Route path="/signup" element={<Signup />}></Route>
+                            <Route path="/profile" element={<UserProfile />}></Route>
+                            <Route path="/admin/orders" element={<AdminOrders />} />
+                            <Route path="/order-success" element={<OrderSuccess />} />
                             <Route path="/error" element={<Error />}></Route>
                             <Route path="/contact" element={<Contact />}></Route>
                         </Routes>

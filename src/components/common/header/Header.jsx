@@ -8,25 +8,6 @@ const Header = () => {
     const totalItems = useSelector(state => state.cart.totalItems);
     return (
         <div>
-            <div className='md:container md:mx-auto hidden lg:flex lg:justify-between text-white text-sm main p-4 top box-border'>
-                <div className='flex'>
-                    <div>
-                        <span className='fas fa-map-marker-alt secondary pr-3 pl-2'></span>
-                        <span className='hover:cursor-pointer'>123 Street, New York</span>
-                    </div>
-                    <div>
-                        <span className="fas fa-envelope secondary pr-3 pl-4"></span>
-                        <span className='hover:cursor-pointer'>Email@Example.com</span>
-                    </div>
-                </div>
-                <div className='pr-4'>
-                    <span className='hover:cursor-pointer hov transition'>Privacy Policy</span>
-                    <span className='pr-2 pl-2 hover:cursor-pointer'>/</span>
-                    <span className='hover:cursor-pointer hov transition'>Terms of Use</span>
-                    <span className='pl-2 pr-2 hover:cursor-pointer'>/</span>
-                    <span className='hover:cursor-pointer hov transition'>Sales and Refunds</span>
-                </div>
-            </div>
             <div className='md:container md:mx-auto flex items-center justify-between m-6 sticky z-10 relative'>
                 {/* Home icon on the left */}
                 <Link to='/' className='flex items-center justify-center w-12 h-12 rounded-xl border border-gray-200 bg-white shadow mr-2'>
@@ -56,6 +37,7 @@ const Header = () => {
                         <Link to='/checkout' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-credit-card mr-2"></i>Checkout</Link>
                         <Link to='/testimonial' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-comment mr-2"></i>Testimonial</Link>
                         <Link to='/contact' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-envelope mr-2"></i>Contact</Link>
+                        <Link to='/profile' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-user mr-2"></i>Profile</Link>
                     </div>
                     {/* Click outside to close */}
                     <div className="flex-1" onClick={()=> setBar(false)}></div>
