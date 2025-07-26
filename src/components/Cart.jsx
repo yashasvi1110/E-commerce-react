@@ -4,6 +4,9 @@ import { addToCart, removeFromCart, clearItem, clearCart } from '../redux/CartSl
 import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const dispatch = useDispatch();
     const items = useSelector(state => state.cart.items);
     const subtotal = useSelector(state => state.cart.subtotal);
@@ -42,7 +45,7 @@ export default function Cart() {
     };
 
     const handleContinueShopping = () => {
-        navigate('/shop');
+        navigate('/');
     };
 
     const getEstimatedDeliveryTime = () => {

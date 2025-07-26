@@ -9,6 +9,18 @@ const ShopDetail = () => {
     return (
         <div>
             <Back title='Shop Detail'/>
+            
+            {/* Company Information Section */}
+            <div className='bg-green-50 border border-green-200 rounded-lg mx-4 sm:mx-20 lg:mx-40 mb-6 p-4'>
+                <div className='text-center'>
+                    <h3 className='text-lg font-bold text-green-800 mb-2'>Company Information</h3>
+                    <div className='space-y-1'>
+                        <p className='text-green-700 font-semibold'>Bhutani Alphatum</p>
+                        <p className='text-green-600'>Phone: 12345677890</p>
+                    </div>
+                </div>
+            </div>
+            
             <div className='sm:mx-20 lg:flex 2xl:mx-40'>
                 <div className='grid grid-cols-1 gap-2 mx-5 mt-0 xl:gap-x-3 xl:gap-y-0'>
                     <div>

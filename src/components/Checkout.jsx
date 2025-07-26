@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import LastMinuteBuy from './LastMinuteBuy';
 import Subscribe from './subscribe';
-import { addToCart, removeFromCart } from '../redux/CartSlice';
+import { addToCart, removeFromCart, clearCart } from '../redux/CartSlice';
 
 const Checkout = () => {
     const items = useSelector(state => state.cart.items);
@@ -212,7 +212,7 @@ const Checkout = () => {
             console.log('✅ Order placed successfully (simulated)');
             
             // Clear the cart
-            dispatch({ type: 'cart/clearCart' });
+            dispatch(clearCart());
             
             // Clear the form
             setForm({ 
@@ -241,6 +241,10 @@ const Checkout = () => {
             
             setPlacingOrder(false);
         }, 2000); // 2 second delay to show loading
+    };
+
+    const handleContinueShopping = () => {
+        navigate('/');
     };
 
     const showUpi = paymentMethod === 'Paypal' || paymentMethod === 'Direct Bank Transfer';
@@ -544,7 +548,7 @@ const Checkout = () => {
                         </div>
                         
                         {/* Order Summary - Mobile Optimized */}
-                        <div ref={orderSummaryRef} className="relative overflow-x-auto shadow-md sm:rounded-lg mb-6">
+                        <div ref={orderSummaryRef} className="relative overflow-x-auto shadow-md sm:rounded-lg">
                             <div className="bg-white rounded-lg p-4 lg:p-6">
                                 <h3 className="text-lg lg:text-xl font-bold text-gray-800 mb-4">Order Summary</h3>
                                 
@@ -626,7 +630,7 @@ const Checkout = () => {
 
                         {/* Subscribe Section - Right after Order Summary */}
                         <div className="bg-white rounded-lg shadow-md p-4">
-                            <h3 className="text-lg lg:text-xl font-bold text-gray-800 mb-4">Subscribe for Regular Deliveries</h3>
+                            <h3 className="text-lg lg:text-xl font-bold text-gray-800">Subscribe for Regular Deliveries</h3>
                             <Subscribe />
                         </div>
                     </div>

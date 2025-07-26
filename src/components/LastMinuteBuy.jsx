@@ -2,11 +2,13 @@ import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../redux/CartSlice';
 import productsData from '../data/products.json';
+import { useNavigate } from 'react-router-dom';
 
 const LastMinuteBuy = ({ category = 'fruits', title }) => {
     const dispatch = useDispatch();
     const scrollRef = useRef(null);
     const cartItems = useSelector(state => state.cart.items);
+    const navigate = useNavigate();
 
     // Filter products by category
     const filteredProducts = productsData.products.filter(product => product.category === category);
@@ -47,6 +49,10 @@ const LastMinuteBuy = ({ category = 'fruits', title }) => {
 
     const handleDecreaseQuantity = (product) => {
         dispatch(removeFromCart(product));
+    };
+
+    const handleContinueShopping = () => {
+        navigate('/');
     };
 
     return (
@@ -146,7 +152,7 @@ const LastMinuteBuy = ({ category = 'fruits', title }) => {
                                     </div>
                                     
                                     <div className="text-xs text-green-600 font-medium text-center">
-                                        In Cart ({cartQuantity})
+                                        {cartQuantity} in cart
                                     </div>
                                 </div>
                             )}

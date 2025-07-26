@@ -28,7 +28,7 @@ const Header = () => {
                             <i className="fa fa-times"></i>
                         </button>
                         <Link to='/' className='text-lg font-semibold text-[#81c408] mb-2' onClick={()=> setBar(false)}><i className="fa fa-home mr-2"></i>Home</Link>
-                        <Link to='/shop' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-shopping-basket mr-2"></i>Shop</Link>
+                        {/* <Link to='/shop' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-shopping-bag mr-2"></i>Shop</Link> */}
                         <Link to='/shop-detail' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-info-circle mr-2"></i>Shop Detail</Link>
                         <Link to='/cart' className='text-lg font-semibold text-gray-700 mb-2 flex items-center' onClick={()=> setBar(false)}>
                             <i className="fa fa-shopping-bag mr-2"></i>Cart
@@ -37,6 +37,7 @@ const Header = () => {
                         <Link to='/checkout' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-credit-card mr-2"></i>Checkout</Link>
                         <Link to='/testimonial' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-comment mr-2"></i>Testimonial</Link>
                         <Link to='/contact' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-envelope mr-2"></i>Contact</Link>
+                        <Link to='/admin/inventory' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-boxes mr-2"></i>Inventory</Link>
                         <Link to='/profile' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-user mr-2"></i>Profile</Link>
                     </div>
                     {/* Click outside to close */}

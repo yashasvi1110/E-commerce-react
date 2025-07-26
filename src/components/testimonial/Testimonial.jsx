@@ -3,7 +3,7 @@ import { testimonial } from '../../data/Data'
 
 const Testimonial = () => {
     return (
-        <div className='mt-40 mx-4 sm:mx-20'>
+        <div className='mt-10 mx-4 sm:mx-20'>
             <p className='text-center font-semibold text-xl lg:text-2xl' style={{color: '#81c408'}}>Our Testimonial</p>
             <h1 className='text-center font-bold text-3xl mt-2 md:text-4xl lg:text-5xl' style={{color: '#45595b'}}>Our Client Saying!</h1>
             <div className='grid grid-cols-1 gap-4 mt-10 lg:grid-cols-2'>

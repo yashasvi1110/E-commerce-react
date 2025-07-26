@@ -73,7 +73,11 @@ const OrderSuccess = () => {
 
     // Handle going back to shop after cancellation
     const handleBackToShop = () => {
-        navigate('/shop');
+        navigate('/');
+    };
+
+    const handleContinueShopping = () => {
+        navigate('/');
     };
 
     if (orderCancelled) {
@@ -170,7 +174,7 @@ const OrderSuccess = () => {
                             </span>
                         </div>
                         <p className="text-xs text-green-700">
-                            Product: <b>{subscriptionInfo.product.name}</b> &nbsp;|&nbsp; Quantity: <b>{subscriptionInfo.quantity}</b>
+                            Products: <b>{subscriptionInfo.products?.length > 0 ? subscriptionInfo.products.map(p => p.name).join(', ') : 'N/A'}</b> &nbsp;|&nbsp; Total Items: <b>{subscriptionInfo.products?.reduce((total, p) => total + p.quantity, 0) || 'N/A'}</b>
                         </p>
                     </div>
                 )}
@@ -289,17 +293,17 @@ const OrderSuccess = () => {
                 {/* Action Buttons */}
                 <div className="space-y-3">
                     <button
-                        onClick={() => navigate('/')}
+                        onClick={handleContinueShopping}
                         className="w-full px-6 py-3 bg-[#81c408] text-white font-semibold rounded-md hover:bg-green-600 transition duration-200"
                     >
                         Continue Shopping
                     </button>
                     
                     <button
-                        onClick={() => navigate('/profile')}
+                        onClick={() => navigate('/')}
                         className="w-full px-6 py-3 bg-white text-[#81c408] font-semibold rounded-md border border-[#81c408] hover:bg-green-50 transition duration-200"
                     >
-                        View Profile
+                        Back to Home
                     </button>
                 </div>
 
