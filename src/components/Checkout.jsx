@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Back from './common/Back'
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import LastMinuteBuy from './LastMinuteBuy';
+import { addToCart, removeFromCart } from '../redux/CartSlice';
 
 const Checkout = () => {
     const items = useSelector(state => state.cart.items);
@@ -9,6 +11,8 @@ const Checkout = () => {
     const total = useSelector(state => state.cart.total);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+    const orderSummaryRef = useRef(null);
     
     // Authentication state
     const [user, setUser] = useState(null);
@@ -40,6 +44,14 @@ const Checkout = () => {
     useEffect(() => {
         checkAuthentication();
     }, []);
+
+    // Auto-scroll to top if from subscription
+    useEffect(() => {
+        if (location.state && location.state.fromSubscription) {
+            // Scroll to top of page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [location]);
 
     const checkAuthentication = async () => {
         const token = localStorage.getItem('token');
@@ -274,18 +286,35 @@ const Checkout = () => {
     return (
         <div>
             <Back title='Checkout'/>
-            <div className='mx-5 sm:mx-16'>
-                <h2 className='text-2xl font-semibold mb-6 mt-20 md:text-3xl lg:text-5xl' style={{color: '#45595b'}}>Billing details</h2>
+            
+            {/* Subscription Banner */}
+            {location.state && location.state.fromSubscription && (
+                <div className="mx-3 sm:mx-8 lg:mx-16 mt-16 lg:mt-20 mb-4">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 lg:p-4">
+                        <div className="flex items-center justify-center space-x-2">
+                            <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span className="text-sm lg:text-base font-medium text-green-800">
+                                Subscription Setup Complete! Please fill in your billing details below.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            <div className='mx-3 sm:mx-8 lg:mx-16'>
+                <h2 className='text-xl sm:text-2xl font-semibold mb-4 mt-4 lg:mt-8 lg:text-3xl xl:text-5xl' style={{color: '#45595b'}}>Billing details</h2>
                 
-                {/* Saved Addresses Section */}
+                {/* Saved Addresses Section - Mobile optimized */}
                 {userAddresses.length > 0 && (
-                    <div className="mb-8 p-4 bg-gray-50 rounded-lg">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">Saved Addresses</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="mb-6 lg:mb-8 p-3 lg:p-4 bg-gray-50 rounded-lg">
+                        <h3 className="text-base lg:text-lg font-medium text-gray-900 mb-3 lg:mb-4">Saved Addresses</h3>
+                        <div className="grid grid-cols-1 gap-3 lg:gap-4 mb-3 lg:mb-4">
                             {userAddresses.map((address) => (
                                 <div
                                     key={address.id}
-                                    className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                                    className={`border rounded-lg p-3 lg:p-4 cursor-pointer transition-colors ${
                                         selectedAddress?.id === address.id
                                             ? 'border-[#81c408] bg-green-50'
                                             : 'border-gray-200 hover:border-gray-300'
@@ -293,7 +322,7 @@ const Checkout = () => {
                                     onClick={() => handleAddressSelection(address)}
                                 >
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#81c408] text-white">
+                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#81c408] text-white">
                                             {address.addressType}
                                         </span>
                                         {address.isDefault && (
@@ -320,11 +349,11 @@ const Checkout = () => {
                     </div>
                 )}
 
-                {/* Add New Address Form */}
+                {/* Add New Address Form - Mobile optimized */}
                 {showNewAddressForm && (
-                    <div className="mb-8 p-4 bg-gray-50 rounded-lg">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Address</h3>
-                        <form onSubmit={handleAddNewAddress} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="mb-6 lg:mb-8 p-3 lg:p-4 bg-gray-50 rounded-lg">
+                        <h3 className="text-base lg:text-lg font-medium text-gray-900 mb-3 lg:mb-4">Add New Address</h3>
+                        <form onSubmit={handleAddNewAddress} className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Address Type</label>
                                 <select
@@ -402,7 +431,7 @@ const Checkout = () => {
                                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-[#81c408] focus:border-[#81c408] sm:text-sm"
                                 />
                             </div>
-                            <div className="md:col-span-2">
+                            <div className="lg:col-span-2">
                                 <label className="flex items-center">
                                     <input
                                         type="checkbox"
@@ -414,7 +443,7 @@ const Checkout = () => {
                                     <span className="ml-2 text-sm text-gray-700">Set as default address</span>
                                 </label>
                             </div>
-                            <div className="md:col-span-2 flex space-x-3">
+                            <div className="lg:col-span-2 flex space-x-3">
                                 <button
                                     type="submit"
                                     className="px-4 py-2 text-sm font-medium text-white bg-[#81c408] rounded-md hover:bg-green-600"
@@ -433,119 +462,165 @@ const Checkout = () => {
                     </div>
                 )}
 
-                <div className='lg:flex lg:justify-between'>
-                    <form className='lg:w-10/12 lg:mr-10' action="#" style={{color: '#45595b'}} onSubmit={e => e.preventDefault()}>
-                        <div>
-                            <label>First Name<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <input name="firstName" value={form.firstName} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" required />
-                        </div>
-                        <div>
-                            <label>Last Name<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <input name="lastName" value={form.lastName} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" required />
-                        </div>
-                        <div>
-                            <label>Company Name</label>
-                            <input name="company" value={form.company} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" />
-                        </div>
-                        <div>
-                            <label>Address<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <input name="address" value={form.address} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" placeholder='House Number Street Name' required />
-                        </div>
-                        <div>
-                            <label>Town/City<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <input name="city" value={form.city} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" required />
-                        </div>
-                        <div>
-                            <label>Country<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <input name="country" value={form.country} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" required />
-                        </div>
-                        <div>
-                            <label>Postcode/Zip<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <input name="zip" value={form.zip} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" required />
-                        </div>
-                        <div>
-                            <label>Mobile<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <input name="mobile" value={form.mobile} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" required />
-                        </div>
-                        <div>
-                            <label>Email Address<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <input name="email" value={form.email} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="email" required />
-                        </div>
-                        <div>
-                            <label>Payment Method<sup className=' relative top-2 text-4xl'>*</sup></label>
-                            <div className='my-2'>
-                                <label><input type="radio" name="paymentMethod" value="Cash on Delivery" checked={paymentMethod === 'Cash on Delivery'} onChange={handlePaymentChange}/> Cash on Delivery</label>
+                <div className='lg:flex lg:justify-between lg:space-x-8'>
+                    <form className='lg:w-1/2 lg:pr-4' action="#" style={{color: '#45595b'}} onSubmit={e => e.preventDefault()}>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium mb-1">First Name<sup className='text-red-500'>*</sup></label>
+                                <input name="firstName" value={form.firstName} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
                             </div>
-                            <div className='my-2'>
-                                <label><input type="radio" name="paymentMethod" value="Paypal" checked={paymentMethod === 'Paypal'} onChange={handlePaymentChange}/> Paypal</label>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Last Name<sup className='text-red-500'>*</sup></label>
+                                <input name="lastName" value={form.lastName} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
                             </div>
-                            <div className='my-2'>
-                                <label><input type="radio" name="paymentMethod" value="Direct Bank Transfer" checked={paymentMethod === 'Direct Bank Transfer'} onChange={handlePaymentChange}/> Direct Bank Transfer</label>
+                            <div className="sm:col-span-2">
+                                <label className="block text-sm font-medium mb-1">Company Name</label>
+                                <input name="company" value={form.company} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" />
+                            </div>
+                            <div className="sm:col-span-2">
+                                <label className="block text-sm font-medium mb-1">Address<sup className='text-red-500'>*</sup></label>
+                                <input name="address" value={form.address} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" placeholder='House Number Street Name' required />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Town/City<sup className='text-red-500'>*</sup></label>
+                                <input name="city" value={form.city} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Country<sup className='text-red-500'>*</sup></label>
+                                <input name="country" value={form.country} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Postcode/Zip<sup className='text-red-500'>*</sup></label>
+                                <input name="zip" value={form.zip} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Mobile<sup className='text-red-500'>*</sup></label>
+                                <input name="mobile" value={form.mobile} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
+                            </div>
+                            <div className="sm:col-span-2">
+                                <label className="block text-sm font-medium mb-1">Email Address<sup className='text-red-500'>*</sup></label>
+                                <input name="email" value={form.email} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="email" required />
+                            </div>
+                        </div>
+                        
+                        <div className="mt-6">
+                            <label className="block text-sm font-medium mb-3">Payment Method<sup className='text-red-500'>*</sup></label>
+                            <div className="space-y-2">
+                                <label className="flex items-center">
+                                    <input type="radio" name="paymentMethod" value="Cash on Delivery" checked={paymentMethod === 'Cash on Delivery'} onChange={handlePaymentChange} className="mr-2"/>
+                                    <span className="text-sm">Cash on Delivery</span>
+                                </label>
+                                <label className="flex items-center">
+                                    <input type="radio" name="paymentMethod" value="Paypal" checked={paymentMethod === 'Paypal'} onChange={handlePaymentChange} className="mr-2"/>
+                                    <span className="text-sm">Paypal</span>
+                                </label>
+                                <label className="flex items-center">
+                                    <input type="radio" name="paymentMethod" value="Direct Bank Transfer" checked={paymentMethod === 'Direct Bank Transfer'} onChange={handlePaymentChange} className="mr-2"/>
+                                    <span className="text-sm">Direct Bank Transfer</span>
+                                </label>
                             </div>
                             {showUpi && (
-                                <div className='my-2'>
-                                    <label>UPI ID:</label>
-                                    <input name="upi" value={form.upi} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' type="text" placeholder='Paste your UPI ID here' required={showUpi} />
+                                <div className="mt-3">
+                                    <label className="block text-sm font-medium mb-1">UPI ID:</label>
+                                    <input name="upi" value={form.upi} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" placeholder='Paste your UPI ID here' required={showUpi} />
                                 </div>
                             )}
                         </div>
-                        <textarea name="notes" value={form.notes} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-2 py-2 mt-2' cols="30" rows="10" placeholder='Order Notes (Optional)'></textarea>
+                        
+                        <div className="mt-6">
+                            <label className="block text-sm font-medium mb-2">Order Notes (Optional)</label>
+                            <textarea name="notes" value={form.notes} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' rows="4" placeholder='Any special instructions...'></textarea>
+                        </div>
                     </form>
-                    
-                    {/* Order Summary */}
-                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-10">
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" className="px-6 py-3">Products</th>
-                                    <th scope="col" className="px-6 py-3">Name</th>
-                                    <th scope="col" className="px-6 py-3">Price</th>
-                                    <th scope="col" className="px-6 py-3">Quantity</th>
-                                    <th scope="col" className="px-6 py-3">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {items.map((item, index) => (
-                                    <tr key={index} className="border-b">
-                                        <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            <img className="img-cart rounded-full w-12 h-12 object-cover" src={item.img} alt={item.name} />
-                                        </td>
-                                        <td className="px-6 py-4">{item.name}</td>
-                                        <td className="px-6 py-4">${item.price}</td>
-                                        <td className="px-6 py-4">{item.quantity}</td>
-                                        <td className="px-6 py-4">${(item.price * item.quantity).toFixed(2)}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <div className='flex justify-end pr-10 my-8' style={{color: '#45595b'}}>
-                            <h3>Subtotal</h3>
-                            <span className='ml-20'>${subtotal.toFixed(2)}</span>
+
+                    <div className="lg:w-1/2 lg:pl-4 mt-8 lg:mt-0">
+                        {/* Last Minute Buy - Mobile Optimized */}
+                        <div className="mb-4">
+                            <LastMinuteBuy category="fruits" title="🍎 Quick Add Fruits" />
                         </div>
-                        <hr />
-                        <div className='flex justify-center items-center my-20' style={{color: '#45595b'}}>
-                            <h3>Shipping</h3>
-                            <div className='ml-10 sm:ml-20'>
-                                <div>
-                                    <input type="checkbox" id='free' defaultChecked/>
-                                    <label className='ml-2' htmlFor='free'>Standard Shipping: $3.00</label>
+                        <div className="mb-4">
+                            <LastMinuteBuy category="vegetables" title="🥕 Quick Add Vegetables" />
+                        </div>
+                        
+                        {/* Order Summary - Mobile Optimized */}
+                        <div ref={orderSummaryRef} className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                            <div className="bg-white rounded-lg p-4 lg:p-6">
+                                <h3 className="text-lg lg:text-xl font-bold text-gray-800 mb-4">Order Summary</h3>
+                                
+                                {/* Mobile-friendly product list */}
+                                <div className="space-y-3 mb-4">
+                                    {items.map((item, index) => (
+                                        <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                                            <img 
+                                                className="w-12 h-12 lg:w-16 lg:h-16 object-cover rounded-lg" 
+                                                src={item.img} 
+                                                alt={item.name} 
+                                            />
+                                            <div className="flex-1 min-w-0">
+                                                <h4 className="font-semibold text-gray-800 text-sm lg:text-base truncate">{item.name}</h4>
+                                                <div className="flex items-center space-x-2 mt-1">
+                                                    <button
+                                                        onClick={() => dispatch(removeFromCart({ id: item.id }))}
+                                                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold text-gray-700 focus:outline-none"
+                                                        aria-label="Decrease quantity"
+                                                    >
+                                                        -
+                                                    </button>
+                                                    <span className="text-base font-semibold w-6 text-center">{item.quantity}</span>
+                                                    <button
+                                                        onClick={() => dispatch(addToCart({ ...item }))}
+                                                        className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold text-gray-700 focus:outline-none"
+                                                        aria-label="Increase quantity"
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="font-bold text-green-600 text-sm lg:text-base">₹{(item.price * item.quantity).toFixed(2)}</p>
+                                                <p className="text-gray-500 text-xs">₹{item.price} each</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
+
+                                {/* Price breakdown - Mobile optimized */}
+                                <div className="space-y-2 mb-4">
+                                    <div className="flex justify-between text-sm lg:text-base">
+                                        <span className="text-gray-600">Subtotal ({items.length} items)</span>
+                                        <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm lg:text-base">
+                                        <span className="text-gray-600">Delivery Fee</span>
+                                        <span className="text-green-600 font-semibold">₹3.00</span>
+                                    </div>
+                                    <hr className="border-gray-200" />
+                                    <div className="flex justify-between text-base lg:text-lg font-bold text-gray-800">
+                                        <span>Total</span>
+                                        <span>₹{(total + 3).toFixed(2)}</span>
+                                    </div>
+                                </div>
+
+                                {/* Place Order Button - Mobile optimized */}
+                                <button 
+                                    onClick={handlePlaceOrder} 
+                                    disabled={placingOrder} 
+                                    className={`w-full py-3 lg:py-4 px-4 rounded-lg font-semibold text-sm lg:text-base transition duration-200 ${
+                                        placingOrder 
+                                            ? 'bg-gray-400 cursor-not-allowed' 
+                                            : 'bg-orange-400 hover:bg-orange-500 text-white hover:scale-105'
+                                    }`}
+                                >
+                                    {placingOrder ? (
+                                        <div className="flex items-center justify-center space-x-2">
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                            <span>Placing Order...</span>
+                                        </div>
+                                    ) : (
+                                        'Place Order'
+                                    )}
+                                </button>
                             </div>
-                        </div>
-                        <hr />
-                        <div className='flex justify-evenly my-16' style={{color: '#45595b'}}>
-                            <h3 className='uppercase'>Total</h3>
-                            <span>${(total + 3).toFixed(2)}</span>
-                        </div>
-                        <hr />
-                        <div className='px-4'>
-                            <button 
-                                onClick={handlePlaceOrder} 
-                                disabled={placingOrder} 
-                                className='order uppercase px-4 py-4 border border-orange-400 rounded-lg my-6 mx-auto text-center block w-full text-md font-semibold duration-500'
-                            >
-                                {placingOrder ? 'Placing Order...' : 'Place Order'}
-                            </button>
                         </div>
                     </div>
                 </div>

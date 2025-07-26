@@ -8,7 +8,7 @@ const Vegetables = () => {
     return (
         <div className='mt-10 container mx-auto'>
             <div className='flex flex-col mb-6 mx-2 md:mx-8'>
-                <h1 className='text-2xl font-bold mb-4 text-center' style={{color: '#45595b'}}>Fresh Organic Vegetables</h1>
+                {/* Remove or replace the headline */}
             </div>
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 md:px-8'>
                 {vegetables.map((val) => (

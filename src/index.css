@@ -1,3 +1,355 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom CSS for enhanced UI */
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #81c408;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b9a06;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Animation utility classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+.animate-bounce-gentle {
+  animation: bounce 2s infinite;
+}
+
+.animate-pulse-gentle {
+  animation: pulse 2s infinite;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Enhanced shadows */
+.shadow-3xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.shadow-4xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
+}
+
+/* Glassmorphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Loading spinner */
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #81c408;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Text truncation utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Enhanced button styles */
+.btn-primary {
+  @apply bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50;
+}
+
+.btn-secondary {
+  @apply bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50;
+}
+
+.btn-outline {
+  @apply border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50;
+}
+
+/* Card hover effects */
+.card-hover {
+  @apply transition-all duration-300 transform hover:scale-105 hover:shadow-lg;
+}
+
+/* Gradient backgrounds */
+.bg-gradient-green {
+  background: linear-gradient(135deg, #81c408 0%, #6b9a06 100%);
+}
+
+.bg-gradient-orange {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+}
+
+/* Custom focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .mobile-padding {
+    padding: 0.75rem;
+  }
+  
+  .mobile-text {
+    font-size: 0.875rem;
+  }
+  
+  .mobile-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    @apply border-2 border-current;
+  }
+  
+  .card-hover {
+    @apply border-2 border-gray-300;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-fade-in-up,
+  .animate-slide-in-right,
+  .animate-bounce-gentle,
+  .animate-pulse-gentle {
+    animation: none;
+  }
+}
+
+/* Custom component styles */
+.order {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.order:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+}
+
+.img-cart {
+  transition: transform 0.3s ease;
+}
+
+.img-cart:hover {
+  transform: scale(1.1);
+}
+
+/* Subscription and checkout specific styles */
+.subscription-step {
+  @apply bg-white rounded-lg shadow-md p-4 border border-gray-200;
+}
+
+.subscription-step:hover {
+  @apply shadow-lg border-green-300;
+}
+
+.quantity-control {
+  @apply flex items-center space-x-2;
+}
+
+.quantity-btn {
+  @apply w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-sm font-bold transition-colors duration-200;
+}
+
+.quantity-display {
+  @apply text-lg font-semibold w-8 text-center;
+}
+
+/* Last minute buy styles */
+.last-minute-card {
+  @apply bg-white rounded-lg shadow-sm border border-gray-200 p-3 transition-all duration-200;
+}
+
+.last-minute-card:hover {
+  @apply shadow-md border-green-300 transform scale-105;
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  .mobile-container {
+    @apply px-4 py-2;
+  }
+  
+  .mobile-grid {
+    @apply grid-cols-2 gap-2;
+  }
+  
+  .mobile-text-sm {
+    @apply text-xs;
+  }
+  
+  .mobile-text-base {
+    @apply text-sm;
+  }
+  
+  .mobile-text-lg {
+    @apply text-base;
+  }
+  
+  .mobile-padding-sm {
+    @apply p-2;
+  }
+  
+  .mobile-padding-base {
+    @apply p-3;
+  }
+  
+  .mobile-padding-lg {
+    @apply p-4;
+  }
+}
+
+/* Enhanced accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus visible for keyboard navigation */
+.focus-visible:focus {
+  @apply outline-none ring-2 ring-green-500 ring-opacity-50;
+}
+
+/* Custom scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-break {
+    page-break-before: always;
+  }
+}

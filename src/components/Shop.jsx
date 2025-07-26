@@ -61,10 +61,6 @@ const Shop = () => {
                         <div className='leading-8'>
                             <div>
                                 <input type="radio" name="radio" id="" />
-                                <span className='ml-3' style={{color: '#45595b'}}>Organic</span>
-                            </div>
-                            <div>
-                                <input type="radio" name="radio" id="" />
                                 <span className='ml-3' style={{color: '#45595b'}}>Fresh</span>
                             </div>
                             <div>

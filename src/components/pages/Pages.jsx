@@ -23,37 +23,45 @@ import Signup from '../auth/Signup';
 import UserProfile from '../profile/UserProfile';
 import AdminOrders from '../AdminOrders';
 import OrderSuccess from '../OrderSuccess';
+import { useLocation } from 'react-router-dom';
+
+const PagesInner = () => {
+    const location = useLocation();
+    // Hide subscribe on order success page
+    const hideSubscribe = location.pathname === '/order-success';
+    return (
+        <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1">
+                <Routes>
+                    <Route path="/" element={<Home />}></Route>
+                    <Route path="/shop" element={<Shop />}></Route>
+                    <Route path="/shop-detail" element={<ShopDetail />}></Route>
+                    <Route path="/testimonial" element={<TestimonialMain />}></Route>
+                    <Route path="/cart" element={<Cart />}></Route>
+                    <Route path="/checkout" element={<Checkout />}></Route>
+                    <Route path="/search" element={<SearchResults />}></Route>
+                    <Route path="/lightning-deals" element={<LightningDeals />}></Route>
+                    <Route path="/login" element={<Login />}></Route>
+                    <Route path="/signup" element={<Signup />}></Route>
+                    <Route path="/profile" element={<UserProfile />}></Route>
+                    <Route path="/admin/orders" element={<AdminOrders />} />
+                    <Route path="/order-success" element={<OrderSuccess />} />
+                    <Route path="/error" element={<Error />}></Route>
+                    <Route path="/contact" element={<Contact />}></Route>
+                </Routes>
+            </main>
+            <BottomCartBar />
+            <Footer hideSubscribe={hideSubscribe} />
+        </div>
+    )
+}
 
 const Pages = () => {
     return (
-        <>
-            <Router>
-                <div className="min-h-screen flex flex-col">
-                    <Header />
-                    <main className="flex-1">
-                        <Routes>
-                            <Route path="/" element={<Home />}></Route>
-                            <Route path="/shop" element={<Shop />}></Route>
-                            <Route path="/shop-detail" element={<ShopDetail />}></Route>
-                            <Route path="/testimonial" element={<TestimonialMain />}></Route>
-                            <Route path="/cart" element={<Cart />}></Route>
-                            <Route path="/checkout" element={<Checkout />}></Route>
-                            <Route path="/search" element={<SearchResults />}></Route>
-                            <Route path="/lightning-deals" element={<LightningDeals />}></Route>
-                            <Route path="/login" element={<Login />}></Route>
-                            <Route path="/signup" element={<Signup />}></Route>
-                            <Route path="/profile" element={<UserProfile />}></Route>
-                            <Route path="/admin/orders" element={<AdminOrders />} />
-                            <Route path="/order-success" element={<OrderSuccess />} />
-                            <Route path="/error" element={<Error />}></Route>
-                            <Route path="/contact" element={<Contact />}></Route>
-                        </Routes>
-                    </main>
-                    <BottomCartBar />
-                    <Footer />
-                </div>
-            </Router>
-        </>
+        <Router>
+            <PagesInner />
+        </Router>
     )
 }
 

@@ -7,16 +7,7 @@ const Fruits = () => {
     const dispatch = useDispatch();
     return (
         <div className='mt-10 container mx-auto'>
-            <div className='flex flex-col mb-6 mx-2 md:mx-8'>
-                <h1 className='text-2xl font-bold mb-4 text-center' style={{color: '#45595b'}}>Our Organic Products</h1>
-                <ul className='flex flex-row flex-wrap justify-center gap-2 mb-4'>
-                    <li className='py-2 px-4 border rounded-full text-white text-sm font-semibold bg-yellow-400 hover:cursor-pointer'>All Products</li>
-                    <li className='py-2 px-4 border rounded-full text-gray-700 text-sm font-semibold bg-gray-100 hover:cursor-pointer'>Vegetables</li>
-                    <li className='py-2 px-4 border rounded-full text-gray-700 text-sm font-semibold bg-gray-100 hover:cursor-pointer'>Fruits</li>
-                    <li className='py-2 px-4 border rounded-full text-gray-700 text-sm font-semibold bg-gray-100 hover:cursor-pointer'>Bread</li>
-                    <li className='py-2 px-4 border rounded-full text-gray-700 text-sm font-semibold bg-gray-100 hover:cursor-pointer'>Meat</li>
-                </ul>
-            </div>
+            {/* Removed category tabs */}
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 md:px-8'>
                 {fruits.map((val) => (
                     <div key={val.id} className='bg-white rounded-xl shadow p-2 flex flex-col items-center min-h-[270px]'>

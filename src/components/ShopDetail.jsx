@@ -79,7 +79,7 @@ const ShopDetail = () => {
                                                         Quality :
                                                     </th>
                                                     <td className="px-6 py-4">
-                                                        Organic
+                                                        Healthy
                                                     </td>
                                                 </tr>
                                                 <tr className="bg-white dark:bg-gray-800">
