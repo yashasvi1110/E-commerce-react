@@ -1,10 +1,11 @@
 import React from 'react'
 import { fruits } from '../../data/Data'
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/CartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart } from '../../redux/CartSlice';
 
 const Fruits = () => {
     const dispatch = useDispatch();
+    const cartItems = useSelector(state => state.cart.items);
     return (
         <div className='mt-10 container mx-auto'>
             {/* Removed category tabs */}
@@ -19,12 +20,37 @@ const Fruits = () => {
                         <p className='text-xs text-gray-500 text-center mb-2'>{val.desc}</p>
                         <div className='flex items-center justify-between w-full mt-auto'>
                             <span className='text-sm font-bold text-green-700'>${val.price}</span>
-                            <button
-                                onClick={() => dispatch(addToCart(val))}
-                                className='bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold flex items-center ml-2 active:scale-95 transition-transform duration-100'
-                            >
-                                <i className='fa fa-shopping-bag mr-1'></i> Add
-                            </button>
+                            {(() => {
+                                const cartItem = cartItems.find(item => item.id === val.id);
+                                return cartItem ? (
+                                    // Quantity controls when item is in cart
+                                    <div className="flex items-center gap-1">
+                                        <button
+                                            className="bg-green-100 text-green-700 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold active:scale-95 transition-transform duration-100"
+                                            onClick={() => dispatch(removeFromCart(val))}
+                                        >
+                                            <i className="fa fa-minus text-xs"></i>
+                                        </button>
+                                        <span className="mx-2 text-sm font-bold text-green-700 min-w-[20px] text-center">
+                                            {cartItem.quantity}
+                                        </span>
+                                        <button
+                                            className="bg-green-100 text-green-700 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold active:scale-95 transition-transform duration-100"
+                                            onClick={() => dispatch(addToCart(val))}
+                                        >
+                                            <i className="fa fa-plus text-xs"></i>
+                                        </button>
+                                    </div>
+                                ) : (
+                                    // ADD button when item is not in cart
+                                    <button
+                                        onClick={() => dispatch(addToCart(val))}
+                                        className='bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold flex items-center ml-2 active:scale-95 transition-transform duration-100'
+                                    >
+                                        <i className='fa fa-shopping-bag mr-1'></i> Add
+                                    </button>
+                                );
+                            })()}
                         </div>
                     </div>
                 ))}

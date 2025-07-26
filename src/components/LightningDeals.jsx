@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../redux/CartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart } from '../redux/CartSlice';
 import { products } from '../data/Data';
 
 const LightningDeals = () => {
   const [lightningProducts, setLightningProducts] = useState([]);
   const [timers, setTimers] = useState({});
   const dispatch = useDispatch();
+  const cartItems = useSelector(state => state.cart.items);
 
   useEffect(() => {
     // Filter products that are lightning deals
@@ -96,17 +97,46 @@ const LightningDeals = () => {
                   {/* Product image */}
                   <div className="w-full h-24 flex items-center justify-center overflow-hidden rounded-lg mb-1 relative mt-6">
                     <img className="object-cover w-full h-full rounded-lg" src={product.img} alt={product.name} />
-                    <button
-                      className={`absolute bottom-2 left-1/2 -translate-x-1/2 border-2 font-bold px-6 py-1 rounded-xl shadow active:scale-95 transition-transform duration-100 ${
-                        timer.expired 
-                          ? 'bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed' 
-                          : 'bg-white border-red-400 text-red-500 group-hover:bg-red-50'
-                      }`}
-                      onClick={() => !timer.expired && dispatch(addToCart(product))}
-                      disabled={timer.expired}
-                    >
-                      {timer.expired ? 'EXPIRED' : 'ADD'}
-                    </button>
+                    
+                    {/* Check if item is in cart */}
+                    {(() => {
+                      const cartItem = cartItems.find(item => item.id === product.id);
+                      return cartItem ? (
+                        // Quantity controls when item is in cart
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-white border-2 border-red-400 rounded-xl shadow flex items-center px-2 py-1">
+                          <button
+                            className="bg-red-100 text-red-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold active:scale-95 transition-transform duration-100"
+                            onClick={() => dispatch(removeFromCart(product))}
+                            disabled={timer.expired}
+                          >
+                            <i className="fa fa-minus text-xs"></i>
+                          </button>
+                          <span className="mx-2 text-sm font-bold text-red-600 min-w-[20px] text-center">
+                            {cartItem.quantity}
+                          </span>
+                          <button
+                            className="bg-red-100 text-red-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold active:scale-95 transition-transform duration-100"
+                            onClick={() => dispatch(addToCart(product))}
+                            disabled={timer.expired}
+                          >
+                            <i className="fa fa-plus text-xs"></i>
+                          </button>
+                        </div>
+                      ) : (
+                        // ADD button when item is not in cart
+                        <button
+                          className={`absolute bottom-2 left-1/2 -translate-x-1/2 border-2 font-bold px-6 py-1 rounded-xl shadow active:scale-95 transition-transform duration-100 ${
+                            timer.expired 
+                              ? 'bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed' 
+                              : 'bg-white border-red-400 text-red-500 group-hover:bg-red-50'
+                          }`}
+                          onClick={() => !timer.expired && dispatch(addToCart(product))}
+                          disabled={timer.expired}
+                        >
+                          {timer.expired ? 'EXPIRED' : 'ADD'}
+                        </button>
+                      );
+                    })()}
                   </div>
                   
                   {/* Price section with original price */}
