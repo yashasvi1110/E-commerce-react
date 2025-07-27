@@ -26,7 +26,7 @@ const UserProfile = () => {
     useEffect(() => {
         fetchUserProfile();
         fetchUserAddresses();
-    }, []);
+    }, [fetchUserProfile, fetchUserAddresses]);
 
     const fetchUserProfile = async () => {
         try {

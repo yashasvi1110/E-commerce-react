@@ -9,7 +9,7 @@ import Home from '../Home';
 import Footer from '../common/footer/Footer';
 // import Shop from '../Shop';
 import ShopDetail from '../ShopDetail';
-import Testimonial from '../testimonial/Testimonial';
+// Removed unused import;
 import TestimonialMain from '../testimonial/TestimonialMain';
 import Error from '../Error';
 import Contact from '../Contact';

@@ -7,9 +7,10 @@ const Contact = () => {
             <Back title='Contact'/>
             <div className='m-auto text-center bg-gray-100 py-10 px-6 mx-4 rounded-lg sm:mx-20 md:mx-28'>
                 <h1 className='text-3xl lg:text-5xl font-semibold' style={{color: '#81c408'}}>Get in touch</h1>
-                <p className='my-4 w-10/12 text-center m-auto' style={{color: '#45595b'}}>The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done.<a className='ml-1' href="" style={{color: '#81c408'}}>Download Now.</a></p>
+                <p className='my-4 w-10/12 text-center m-auto' style={{color: '#45595b'}}>The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done.<a className='ml-1' href="#" style={{color: '#81c408'}}>Download Now.</a></p>
                 <div className=" rounded w-10/12 h-96 mx-auto my-8">
                     <iframe className="rounded w-full h-full"
+                    title="Google Maps - New York Location"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387191.33750346623!2d-73.97968099999999!3d40.6974881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1694259649153!5m2!1sen!2sbd" 
                     loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>

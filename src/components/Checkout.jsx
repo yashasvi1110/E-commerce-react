@@ -57,7 +57,6 @@ const Checkout = () => {
                 if (response.ok) {
                     const userData = await response.json();
                     setIsAuthenticated(true);
-                    fetchUserAddresses();
                     
                     // Pre-fill form with user data
                     setForm({
@@ -97,6 +96,16 @@ const Checkout = () => {
         }
     }, [location]);
 
+    const fillFormWithAddress = useCallback((address) => {
+        setForm({
+            ...form,
+            address: address.addressLine1,
+            city: address.city,
+            country: address.country,
+            zip: address.zipCode
+        });
+    }, [form]);
+
     const fetchUserAddresses = useCallback(async () => {
         try {
             const token = localStorage.getItem('token');
@@ -120,17 +129,9 @@ const Checkout = () => {
         } catch (error) {
             console.error('Error fetching addresses:', error);
         }
-    }, [apiUrl]);
+    }, [apiUrl, fillFormWithAddress]);
 
-    const fillFormWithAddress = (address) => {
-        setForm({
-            ...form,
-            address: address.addressLine1,
-            city: address.city,
-            country: address.country,
-            zip: address.zipCode
-        });
-    };
+    // Removed duplicate function - now using useCallback version above
 
     const handleAddressSelection = (address) => {
         setSelectedAddress(address);

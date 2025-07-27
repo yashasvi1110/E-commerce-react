@@ -1,15 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { products } from '../../data/Data'
-import Slider from "react-slick";
-
-var settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-};
+// Removed unused imports and variables
 
 const Hero = () => {
     const [searchTerm, setSearchTerm] = useState('');
