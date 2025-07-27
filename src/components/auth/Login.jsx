@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+// Removed unused import
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -12,7 +12,7 @@ const Login = () => {
     const [loginError, setLoginError] = useState('');
     
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    // Removed unused dispatch
 
     const handleChange = (e) => {
         setFormData({
@@ -173,9 +173,9 @@ const Login = () => {
                             </div>
 
                             <div className="text-sm">
-                                <a href="#" className="font-medium text-[#81c408] hover:text-green-600">
+                                <button className="font-medium text-[#81c408] hover:text-green-600 bg-transparent border-none cursor-pointer">
                                     Forgot your password?
-                                </a>
+                                </button>
                             </div>
                         </div>
 

@@ -2,13 +2,13 @@ import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../redux/CartSlice';
 import productsData from '../data/products.json';
-import { useNavigate } from 'react-router-dom';
+// Removed unused import
 
 const LastMinuteBuy = ({ category = 'fruits', title }) => {
     const dispatch = useDispatch();
     const scrollRef = useRef(null);
     const cartItems = useSelector(state => state.cart.items);
-    const navigate = useNavigate();
+    // Removed unused navigate
 
     // Filter products by category
     const filteredProducts = productsData.products.filter(product => product.category === category);
@@ -51,9 +51,7 @@ const LastMinuteBuy = ({ category = 'fruits', title }) => {
         dispatch(removeFromCart(product));
     };
 
-    const handleContinueShopping = () => {
-        navigate('/');
-    };
+    // Removed unused function
 
     return (
         <div className="mb-4">

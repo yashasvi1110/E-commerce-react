@@ -17,10 +17,10 @@ const Footer = ({ hideSubscribe }) => {
                     )}
                     {/* Social Icons */}
                     <div className='flex gap-3 mt-2'>
-                        <a href="#" className='bg-white text-[#81c408] rounded-full p-2 shadow hover:bg-orange-400 hover:text-white transition'><i className='fab fa-twitter'></i></a>
-                        <a href="#" className='bg-white text-[#81c408] rounded-full p-2 shadow hover:bg-orange-400 hover:text-white transition'><i className='fab fa-facebook-f'></i></a>
-                        <a href="#" className='bg-white text-[#81c408] rounded-full p-2 shadow hover:bg-orange-400 hover:text-white transition'><i className='fab fa-youtube'></i></a>
-                        <a href="#" className='bg-white text-[#81c408] rounded-full p-2 shadow hover:bg-orange-400 hover:text-white transition'><i className='fab fa-linkedin-in'></i></a>
+                        <button className='bg-white text-[#81c408] rounded-full p-2 shadow hover:bg-orange-400 hover:text-white transition'><i className='fab fa-twitter'></i></button>
+                        <button className='bg-white text-[#81c408] rounded-full p-2 shadow hover:bg-orange-400 hover:text-white transition'><i className='fab fa-facebook-f'></i></button>
+                        <button className='bg-white text-[#81c408] rounded-full p-2 shadow hover:bg-orange-400 hover:text-white transition'><i className='fab fa-youtube'></i></button>
+                        <button className='bg-white text-[#81c408] rounded-full p-2 shadow hover:bg-orange-400 hover:text-white transition'><i className='fab fa-linkedin-in'></i></button>
                     </div>
                 </div>
                 {/* Quick Links */}

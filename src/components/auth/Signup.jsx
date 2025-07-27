@@ -49,7 +49,7 @@ const Signup = () => {
         
         if (!formData.phone) {
             newErrors.phone = 'Phone number is required';
-        } else if (!/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/\s/g, ''))) {
+        } else if (!/^[+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/\s/g, ''))) {
             newErrors.phone = 'Phone number is invalid';
         }
         
@@ -288,9 +288,9 @@ const Signup = () => {
                             />
                             <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-900">
                                 I agree to the{' '}
-                                <a href="#" className="text-[#81c408] hover:text-green-600">
+                                <button className="text-[#81c408] hover:text-green-600 bg-transparent border-none cursor-pointer">
                                     Terms and Conditions
-                                </a>
+                                </button>
                             </label>
                         </div>
 

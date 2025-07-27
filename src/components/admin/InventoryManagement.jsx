@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { categories } from '../../data/Data';
+// Removed unused import
 import ProductForm from './ProductForm';
 import ProductTable from './ProductTable';
 import SupplyManagement from './SupplyManagement';

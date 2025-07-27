@@ -106,30 +106,7 @@ const Checkout = () => {
         });
     }, [form]);
 
-    const fetchUserAddresses = useCallback(async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/api/user/addresses`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                const addressesData = await response.json();
-                setUserAddresses(addressesData);
-                
-                // Set default address if available
-                const defaultAddress = addressesData.find(addr => addr.isDefault);
-                if (defaultAddress) {
-                    setSelectedAddress(defaultAddress);
-                    fillFormWithAddress(defaultAddress);
-                }
-            }
-        } catch (error) {
-            console.error('Error fetching addresses:', error);
-        }
-    }, [apiUrl, fillFormWithAddress]);
+    // Removed unused function - not needed for guest checkout
 
     // Removed duplicate function - now using useCallback version above
 
