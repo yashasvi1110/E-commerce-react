@@ -15,6 +15,9 @@ const Checkout = () => {
     const location = useLocation();
     const orderSummaryRef = useRef(null);
     
+    // API URL for backend calls
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    
     // Authentication state
     const [user, setUser] = useState(null);
     const [userAddresses, setUserAddresses] = useState([]);
@@ -58,7 +61,7 @@ const Checkout = () => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await fetch('http://localhost:5000/api/user/profile', {
+                const response = await fetch(`${apiUrl}/api/user/profile`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -99,7 +102,7 @@ const Checkout = () => {
     const fetchUserAddresses = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/user/addresses', {
+            const response = await fetch(`${apiUrl}/api/user/addresses`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -148,7 +151,7 @@ const Checkout = () => {
         
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/user/addresses', {
+            const response = await fetch(`${apiUrl}/api/user/addresses`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
