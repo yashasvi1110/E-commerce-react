@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Back from './common/Back'
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import LastMinuteBuy from './LastMinuteBuy';
 import Subscribe from './subscribe';
 import { addToCart, removeFromCart, clearCart } from '../redux/CartSlice';
@@ -19,7 +19,6 @@ const Checkout = () => {
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
     
     // Authentication state
-    const [user, setUser] = useState(null);
     const [userAddresses, setUserAddresses] = useState([]);
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [showNewAddressForm, setShowNewAddressForm] = useState(false);
@@ -45,19 +44,7 @@ const Checkout = () => {
     const [placingOrder, setPlacingOrder] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
 
-    useEffect(() => {
-        checkAuthentication();
-    }, []);
-
-    // Auto-scroll to top if from subscription
-    useEffect(() => {
-        if (location.state && location.state.fromSubscription) {
-            // Scroll to top of page
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }, [location]);
-
-    const checkAuthentication = async () => {
+    const checkAuthentication = useCallback(async () => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
@@ -69,7 +56,6 @@ const Checkout = () => {
                 
                 if (response.ok) {
                     const userData = await response.json();
-                    setUser(userData);
                     setIsAuthenticated(true);
                     fetchUserAddresses();
                     
@@ -97,9 +83,21 @@ const Checkout = () => {
             setIsAuthenticated(false);
         }
         setLoading(false);
-    };
+    }, [apiUrl]);
 
-    const fetchUserAddresses = async () => {
+    useEffect(() => {
+        checkAuthentication();
+    }, [checkAuthentication]);
+
+    // Auto-scroll to top if from subscription
+    useEffect(() => {
+        if (location.state && location.state.fromSubscription) {
+            // Scroll to top of page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [location]);
+
+    const fetchUserAddresses = useCallback(async () => {
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(`${apiUrl}/api/user/addresses`, {
@@ -122,7 +120,7 @@ const Checkout = () => {
         } catch (error) {
             console.error('Error fetching addresses:', error);
         }
-    };
+    }, [apiUrl]);
 
     const fillFormWithAddress = (address) => {
         setForm({
@@ -242,9 +240,7 @@ const Checkout = () => {
         }, 2000); // 2 second delay to show loading
     };
 
-    const handleContinueShopping = () => {
-        navigate('/');
-    };
+    // Removed unused function
 
     const showUpi = paymentMethod === 'Paypal' || paymentMethod === 'Direct Bank Transfer';
 

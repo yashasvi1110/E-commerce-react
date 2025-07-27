@@ -14,7 +14,7 @@ export default function Cart() {
     const navigate = useNavigate();
     
     const [isCheckingOut, setIsCheckingOut] = useState(false);
-    const [showQuickView, setShowQuickView] = useState(false);
+    // Removed unused state variables
 
     const emptyCartMsg = (
         <div className="text-center py-16">
