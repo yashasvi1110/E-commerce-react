@@ -36,7 +36,7 @@ const UserProfile = () => {
                 return;
             }
 
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
             const response = await fetch(`${apiUrl}/api/user/profile`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -61,7 +61,7 @@ const UserProfile = () => {
     const fetchUserAddresses = async () => {
         try {
             const token = localStorage.getItem('token');
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
             const response = await fetch(`${apiUrl}/api/user/addresses`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -89,7 +89,7 @@ const UserProfile = () => {
         
         try {
             const token = localStorage.getItem('token');
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
             const response = await fetch(`${apiUrl}/api/user/addresses`, {
                 method: 'POST',
                 headers: {
@@ -123,7 +123,7 @@ const UserProfile = () => {
         
         try {
             const token = localStorage.getItem('token');
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
             const response = await fetch(`${apiUrl}/api/user/addresses/${editingAddress.id}`, {
                 method: 'PUT',
                 headers: {
@@ -156,7 +156,7 @@ const UserProfile = () => {
         if (window.confirm('Are you sure you want to delete this address?')) {
             try {
                 const token = localStorage.getItem('token');
-                const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+                const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
                 const response = await fetch(`${apiUrl}/api/user/addresses/${addressId}`, {
                     method: 'DELETE',
                     headers: {
@@ -176,14 +176,14 @@ const UserProfile = () => {
     const startEditAddress = (address) => {
         setEditingAddress(address);
         setAddressForm({
-            addressType: address.addressType,
-            addressLine1: address.addressLine1,
-            addressLine2: address.addressLine2 || '',
-            city: address.city,
+            addressType: address.address_type || 'home',
+            addressLine1: address.address_line1 || '',
+            addressLine2: address.address_line2 || '',
+            city: address.city || '',
             state: address.state || '',
-            country: address.country,
-            zipCode: address.zipCode,
-            isDefault: address.isDefault
+            country: address.country || '',
+            zipCode: address.zip_code || '',
+            isDefault: address.is_default || false
         });
     };
 
@@ -197,8 +197,24 @@ const UserProfile = () => {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#81c408] mx-auto"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
                     <p className="mt-4 text-gray-600">Loading profile...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <p className="text-gray-600">Please log in to view your profile.</p>
+                    <button 
+                        onClick={() => navigate('/login')}
+                        className="mt-4 bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600"
+                    >
+                        Go to Login
+                    </button>
                 </div>
             </div>
         );
@@ -255,11 +271,11 @@ const UserProfile = () => {
                                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">First Name</label>
-                                        <p className="mt-1 text-sm text-gray-900">{user?.firstName}</p>
+                                        <p className="mt-1 text-sm text-gray-900">{user?.first_name}</p>
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                                        <p className="mt-1 text-sm text-gray-900">{user?.lastName}</p>
+                                        <p className="mt-1 text-sm text-gray-900">{user?.last_name}</p>
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700">Email</label>
@@ -294,20 +310,20 @@ const UserProfile = () => {
                                                 <div className="flex-1">
                                                     <div className="flex items-center mb-2">
                                                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#81c408] text-white">
-                                                            {address.addressType}
+                                                            {address.address_type}
                                                         </span>
-                                                        {address.isDefault && (
+                                                        {address.is_default && (
                                                             <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                                 Default
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <p className="text-sm text-gray-900">{address.addressLine1}</p>
-                                                    {address.addressLine2 && (
-                                                        <p className="text-sm text-gray-900">{address.addressLine2}</p>
+                                                    <p className="text-sm text-gray-900">{address.address_line1}</p>
+                                                    {address.address_line2 && (
+                                                        <p className="text-sm text-gray-900">{address.address_line2}</p>
                                                     )}
                                                     <p className="text-sm text-gray-900">
-                                                        {address.city}, {address.state} {address.zipCode}
+                                                        {address.city}, {address.state} {address.zip_code}
                                                     </p>
                                                     <p className="text-sm text-gray-900">{address.country}</p>
                                                 </div>

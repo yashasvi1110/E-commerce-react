@@ -16,7 +16,7 @@ const Checkout = () => {
     const orderSummaryRef = useRef(null);
     
     // API URL for backend calls
-    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
     
     // Authentication state
     const [user, setUser] = useState(null);
@@ -193,11 +193,7 @@ const Checkout = () => {
     const handlePlaceOrder = async () => {
         console.log('🛒 Placing order...');
         
-        if (!isAuthenticated) {
-            console.log('❌ Not authenticated, redirecting to login');
-            navigate('/login');
-            return;
-        }
+        // Guest checkout is allowed - no authentication required
 
         if ((paymentMethod === 'Paypal' || paymentMethod === 'Direct Bank Transfer') && !form.upi) {
             alert('Please enter your UPI ID for the selected payment method.');
@@ -263,37 +259,28 @@ const Checkout = () => {
         );
     }
 
-    // Show authentication prompt if not logged in
-    if (!isAuthenticated) {
-        return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center max-w-md mx-auto px-4">
-                    <div className="bg-white rounded-lg shadow-lg p-8">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">Sign in to Continue</h2>
-                        <p className="text-gray-600 mb-6">Please sign in or create an account to complete your purchase.</p>
-                        <div className="space-y-3">
-                            <Link
-                                to="/login"
-                                className="w-full block px-4 py-2 bg-[#81c408] text-white rounded-md hover:bg-green-600 text-center"
-                            >
-                                Sign In
-                            </Link>
-                            <Link
-                                to="/signup"
-                                className="w-full block px-4 py-2 border border-[#81c408] text-[#81c408] rounded-md hover:bg-[#81c408] hover:text-white text-center"
-                            >
-                                Create Account
-                            </Link>
-                        </div>
-                    </div>
+    // Guest checkout banner - show when not authenticated
+    const GuestCheckoutBanner = () => (
+        <div className="mx-3 sm:mx-8 lg:mx-16 mt-16 lg:mt-20 mb-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 lg:p-4">
+                <div className="flex items-center justify-center space-x-2">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span className="text-sm lg:text-base font-medium text-blue-800">
+                        🎉 Guest Checkout Available! No account required to complete your purchase.
+                    </span>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
 
     return (
         <div>
             <Back title='Checkout'/>
+            
+            {/* Guest Checkout Banner - show when not authenticated */}
+            {!isAuthenticated && <GuestCheckoutBanner />}
             
             {/* Subscription Banner */}
             {location.state && location.state.fromSubscription && (
@@ -609,6 +596,18 @@ const Checkout = () => {
                                     </div>
                                 </div>
 
+                                {/* Guest Checkout Note */}
+                                {!isAuthenticated && (
+                                    <div className="bg-blue-50 rounded-lg p-3 mb-4 border border-blue-200">
+                                        <div className="flex items-center space-x-2">
+                                            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span className="text-sm font-medium text-blue-800">Guest Checkout - No account needed!</span>
+                                        </div>
+                                    </div>
+                                )}
+
                                 {/* Place Order Button - Mobile optimized */}
                                 <button 
                                     onClick={handlePlaceOrder} 
@@ -625,7 +624,14 @@ const Checkout = () => {
                                             <span>Placing Order...</span>
                                         </div>
                                     ) : (
-                                        'Place Order'
+                                        <div className="flex items-center justify-center space-x-2">
+                                            <span>Place Order</span>
+                                            {!isAuthenticated && (
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            )}
+                                        </div>
                                     )}
                                 </button>
                             </div>

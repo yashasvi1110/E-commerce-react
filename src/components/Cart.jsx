@@ -229,6 +229,19 @@ export default function Cart() {
                                     </div>
                                 </div>
 
+                                {/* Guest Checkout Info */}
+                                <div className="bg-blue-50 rounded-lg p-3 mb-4 border border-blue-200">
+                                    <div className="flex items-center space-x-2 mb-1">
+                                        <svg className="w-4 h-4 lg:w-5 lg:h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span className="text-sm lg:text-base font-semibold text-blue-800">Guest Checkout Available</span>
+                                    </div>
+                                    <p className="text-xs lg:text-sm text-blue-700">
+                                        No account required! Complete your purchase as a guest.
+                                    </p>
+                                </div>
+
                                 {/* Checkout Button */}
                                 <button 
                                     onClick={handleProceedToCheckout}

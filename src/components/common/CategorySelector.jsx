@@ -91,22 +91,27 @@ const CategorySelector = () => {
       </div>
 
       {/* Subcategories */}
-      {selectedCategory && (
-        <div className="flex gap-3 mb-4 flex-wrap justify-center">
-          {categories.find(cat => cat.id === selectedCategory).subcategories.map(sub => (
-            <button
-              key={sub.id}
-              className={`px-4 py-1 rounded-full font-semibold text-sm border-2 transition-all duration-150 ${selectedSubcategory === sub.id ? 'bg-orange-400 text-white border-orange-400' : 'bg-white text-orange-400 border-orange-400'}`}
-              onClick={() => {
-                setSelectedSubcategory(sub.id);
-                setCardsToShow(9); // Reset to initial 9 cards
-              }}
-            >
-              {sub.name}
-            </button>
-          ))}
-        </div>
-      )}
+      {selectedCategory && (() => {
+        const selectedCat = categories.find(cat => cat.id === selectedCategory);
+        if (!selectedCat || !selectedCat.subcategories) return null;
+        
+        return (
+          <div className="flex gap-3 mb-4 flex-wrap justify-center">
+            {selectedCat.subcategories.map(sub => (
+              <button
+                key={sub.id}
+                className={`px-4 py-1 rounded-full font-semibold text-sm border-2 transition-all duration-150 ${selectedSubcategory === sub.id ? 'bg-orange-400 text-white border-orange-400' : 'bg-white text-orange-400 border-orange-400'}`}
+                onClick={() => {
+                  setSelectedSubcategory(sub.id);
+                  setCardsToShow(9); // Reset to initial 9 cards
+                }}
+              >
+                {sub.name}
+              </button>
+            ))}
+          </div>
+        );
+      })()}
 
       {/* Featured Products Preview - Show when no category is selected */}
       {!selectedCategory && (

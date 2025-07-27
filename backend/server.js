@@ -129,8 +129,8 @@ const initializeDatabase = async () => {
     }
 };
 
-// Initialize database on startup
-initializeDatabase();
+// Initialize database on startup (commented out for development without MySQL)
+// initializeDatabase();
 
 // Authentication Routes
 
@@ -148,6 +148,31 @@ app.post('/api/auth/signup', async (req, res) => {
             return res.status(400).json({ message: 'Password must be at least 6 characters' });
         }
 
+        // Mock signup for development (no database required)
+        // In production, you would use the database connection below
+        const mockUser = {
+            id: Math.floor(Math.random() * 1000) + 1,
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            phone: phone,
+            created_at: new Date().toISOString()
+        };
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: mockUser.id, email: mockUser.email },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.status(201).json({
+            message: 'User created successfully',
+            token,
+            user: mockUser
+        });
+
+        /* Uncomment this section when database is set up
         const connection = await pool.getConnection();
 
         // Check if user already exists
@@ -193,6 +218,7 @@ app.post('/api/auth/signup', async (req, res) => {
             token,
             user: users[0]
         });
+        */
 
     } catch (error) {
         console.error('Signup error:', error);
@@ -210,6 +236,35 @@ app.post('/api/auth/login', async (req, res) => {
             return res.status(400).json({ message: 'Email and password are required' });
         }
 
+        // Mock login for development (no database required)
+        // In production, you would use the database connection below
+        if (email === 'test@example.com' && password === 'password123') {
+            const mockUser = {
+                id: 1,
+                first_name: 'Test',
+                last_name: 'User',
+                email: email,
+                phone: '+1234567890',
+                created_at: new Date().toISOString()
+            };
+
+            // Generate JWT token
+            const token = jwt.sign(
+                { userId: mockUser.id, email: mockUser.email },
+                JWT_SECRET,
+                { expiresIn: '24h' }
+            );
+
+            res.json({
+                message: 'Login successful',
+                token,
+                user: mockUser
+            });
+        } else {
+            return res.status(401).json({ message: 'Invalid email or password. Use test@example.com / password123' });
+        }
+
+        /* Uncomment this section when database is set up
         const connection = await pool.getConnection();
 
         // Find user by email
@@ -248,6 +303,7 @@ app.post('/api/auth/login', async (req, res) => {
             token,
             user
         });
+        */
 
     } catch (error) {
         console.error('Login error:', error);

@@ -78,7 +78,7 @@ const Signup = () => {
         setLoading(true);
         
         try {
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
         const response = await fetch(`${apiUrl}/api/auth/signup`, {
                 method: 'POST',
                 headers: {
