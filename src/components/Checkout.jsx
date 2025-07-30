@@ -105,7 +105,7 @@ const Checkout = () => {
                 'ghaziabad': { lat: 28.6692, lng: 77.4538 },
                 'faridabad': { lat: 28.4089, lng: 77.3178 },
                 'greater noida': { lat: 28.4744, lng: 77.5040 },
-                'sector 90': { lat: 28.6139, lng: 77.2090 },
+
                 'sector 62': { lat: 28.6274, lng: 77.3769 },
                 'sector 63': { lat: 28.6289, lng: 77.3745 },
                 'sector 64': { lat: 28.6304, lng: 77.3721 },
@@ -251,7 +251,7 @@ const Checkout = () => {
         if (form.address && form.city) {
             calculateDeliveryDetails(form.address, form.city);
         }
-    }, [form.address, form.city]);
+    }, [form.address, form.city, calculateDeliveryDetails]);
 
     const fillFormWithAddress = useCallback((address) => {
         setForm({
