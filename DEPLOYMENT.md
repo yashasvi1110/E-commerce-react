@@ -1,132 +1,89 @@
-# Deploying to Render
-
-This guide will help you deploy your e-commerce app to Render.
+# Deployment Guide for Render
 
 ## Prerequisites
+- GitHub account with your code pushed
+- Render account (free at render.com)
 
-1. A GitHub account
-2. A Render account (free at render.com)
-3. Your code pushed to a GitHub repository
-
-## Step 1: Prepare Your Repository
-
-1. Make sure all your changes are committed and pushed to GitHub
-2. Ensure your repository structure looks like this:
-   ```
-   your-repo/
-   ├── src/                    # Frontend React code
-   ├── backend/                # Backend Node.js code
-   ├── package.json           # Frontend dependencies
-   ├── backend/package.json   # Backend dependencies
-   ├── render.yaml            # Render configuration
-   └── README.md
-   ```
-
-## Step 2: Deploy Backend First
+## Step 1: Deploy Backend
 
 1. Go to [render.com](https://render.com) and sign up/login
-2. Click "New +" and select "Web Service"
+2. Click "New +" → "Web Service"
 3. Connect your GitHub repository
 4. Configure the backend service:
-   - **Name**: `ecommerce-backend`
-   - **Environment**: `Node`
-   - **Build Command**: `cd backend && npm install`
-   - **Start Command**: `cd backend && npm start`
+   - **Name**: `fruitables-backend` (or your preferred name)
+   - **Root Directory**: `backend`
+   - **Runtime**: Node
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
    - **Plan**: Free
 
 5. Add Environment Variables:
    - `NODE_ENV`: `production`
-   - `JWT_SECRET`: Generate a secure random string
-   - `PORT`: `5000`
-   - `CORS_ORIGIN`: Leave empty for now (we'll update after frontend deployment)
+   - `JWT_SECRET`: `your-super-secret-jwt-key-change-this-in-production`
+   - `CORS_ORIGIN`: `https://your-frontend-app-name.onrender.com` (we'll update this after frontend deployment)
+   - `DB_HOST`: `localhost` (for now, we'll use mock data)
+   - `DB_USER`: `root`
+   - `DB_PASSWORD`: (leave empty for now)
+   - `DB_NAME`: `fruitables_db`
 
 6. Click "Create Web Service"
-7. Wait for deployment to complete and note the URL (e.g., `https://ecommerce-backend.onrender.com`)
+7. Wait for deployment to complete
+8. Copy the URL (e.g., `https://fruitables-backend.onrender.com`)
 
-## Step 3: Deploy Frontend
+## Step 2: Deploy Frontend
 
-1. In Render, click "New +" and select "Static Site"
-2. Connect the same GitHub repository
+1. In Render dashboard, click "New +" → "Static Site"
+2. Connect your GitHub repository
 3. Configure the frontend service:
-   - **Name**: `ecommerce-frontend`
-   - **Build Command**: `npm install && npm run build`
+   - **Name**: `fruitables-frontend` (or your preferred name)
+   - **Build Command**: `npm run build`
    - **Publish Directory**: `build`
    - **Plan**: Free
 
-4. Add Environment Variable:
-   - `REACT_APP_API_URL`: `https://ecommerce-backend.onrender.com` (use your backend URL)
+4. Add Environment Variables:
+   - `REACT_APP_API_URL`: `https://your-backend-app-name.onrender.com` (use the URL from step 1)
 
 5. Click "Create Static Site"
 6. Wait for deployment to complete
 
-## Step 4: Update Backend CORS
+## Step 3: Update CORS Origin
 
 1. Go back to your backend service in Render
 2. Go to "Environment" tab
-3. Update the `CORS_ORIGIN` variable to your frontend URL:
-   - `CORS_ORIGIN`: `https://ecommerce-frontend.onrender.com`
+3. Update `CORS_ORIGIN` to your frontend URL: `https://your-frontend-app-name.onrender.com`
 4. Click "Save Changes"
 5. The service will automatically redeploy
 
-## Step 5: Test Your Deployment
+## Step 4: Test Your Application
 
-1. Visit your frontend URL: `https://ecommerce-frontend.onrender.com`
-2. Test the following features:
-   - Browsing products
-   - Adding items to cart
-   - User registration/login
-   - Placing orders
-   - Order history
+1. Visit your frontend URL
+2. Test the signup/login functionality
+3. Test adding items to cart
+4. Test the checkout process
 
 ## Troubleshooting
 
-### Common Issues:
+### If you get CORS errors:
+- Make sure `CORS_ORIGIN` in backend matches your frontend URL exactly
+- Check that the backend URL in frontend environment variables is correct
 
-1. **Build Failures**:
-   - Check the build logs in Render
-   - Ensure all dependencies are in package.json
-   - Verify Node.js version compatibility
+### If authentication doesn't work:
+- Check that JWT_SECRET is set in backend environment variables
+- Verify the API endpoints are working by visiting `https://your-backend-url/api/health`
 
-2. **API Connection Issues**:
-   - Verify the `REACT_APP_API_URL` environment variable is set correctly
-   - Check that the backend is running and accessible
-   - Ensure CORS is properly configured
+### If build fails:
+- Check that all dependencies are in package.json
+- Verify Node.js version compatibility
 
-3. **Environment Variables**:
-   - Make sure all required environment variables are set in Render
-   - Check that variable names match exactly (case-sensitive)
+## Database Setup (Optional)
 
-### Useful Commands:
+For production, you can:
+1. Use a cloud database like PlanetScale, Railway, or AWS RDS
+2. Update the database environment variables in your backend service
+3. Uncomment the database initialization code in server.js
 
-```bash
-# Test backend locally
-cd backend
-npm install
-npm start
+## Custom Domain (Optional)
 
-# Test frontend locally
-npm install
-npm start
-
-# Build frontend locally
-npm run build
-```
-
-## Environment Variables Reference
-
-### Backend Variables:
-- `NODE_ENV`: `production`
-- `JWT_SECRET`: Secure random string for JWT tokens
-- `PORT`: `5000` (Render will override this)
-- `CORS_ORIGIN`: Your frontend URL
-
-### Frontend Variables:
-- `REACT_APP_API_URL`: Your backend URL
-
-## Support
-
-If you encounter issues:
-1. Check Render's deployment logs
-2. Verify all environment variables are set
-3. Test locally first
-4. Check the Render documentation: https://render.com/docs 
+1. In your Render dashboard, go to your service
+2. Click "Settings" → "Custom Domains"
+3. Add your domain and follow the DNS configuration instructions 

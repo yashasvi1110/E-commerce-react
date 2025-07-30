@@ -90,16 +90,28 @@ export default function Cart() {
                                 Cart ({items.length} {items.length === 1 ? 'item' : 'items'})
                             </h1>
                         </div>
-                        <button 
-                            onClick={() => dispatch(clearCart())} 
-                            className="text-red-500 hover:text-red-700 text-sm font-medium flex items-center space-x-1"
-                        >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
-                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                            </svg>
-                            <span>Clear</span>
-                        </button>
+                        <div className="flex items-center space-x-3">
+                            <button 
+                                onClick={() => navigate('/profile')} 
+                                className="text-green-600 hover:text-green-700 text-sm font-medium flex items-center space-x-1"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                <span>Order History</span>
+                            </button>
+                            <button 
+                                onClick={() => dispatch(clearCart())} 
+                                className="text-red-500 hover:text-red-700 text-sm font-medium flex items-center space-x-1"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                <span>Clear</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,7 +122,7 @@ export default function Cart() {
                     <div className="lg:w-2/3 mb-4 lg:mb-0">
                         <div className="bg-white rounded-lg shadow-sm p-3 lg:p-4">
                             <div className="space-y-3">
-                                {items.map(item => (
+                    {items.map(item => (
                                     <div key={item.id} className="flex items-center space-x-3 p-3 border border-gray-100 rounded-lg hover:border-orange-200 transition-all duration-200">
                                         <div className="flex-shrink-0">
                                             <img 
@@ -163,7 +175,7 @@ export default function Cart() {
                                             </div>
                                             <div className="text-xs lg:text-sm text-gray-500">₹{item.price} each</div>
                                         </div>
-                                    </div>
+                            </div>
                                 ))}
                             </div>
                         </div>
@@ -179,7 +191,7 @@ export default function Cart() {
                                 </svg>
                                 <span>Continue Shopping</span>
                             </button>
-                        </div>
+                </div>
                     </div>
 
                     {/* Order Summary - Mobile: Full width, Desktop: 1/3 */}
@@ -229,18 +241,7 @@ export default function Cart() {
                                     </div>
                                 </div>
 
-                                {/* Guest Checkout Info */}
-                                <div className="bg-blue-50 rounded-lg p-3 mb-4 border border-blue-200">
-                                    <div className="flex items-center space-x-2 mb-1">
-                                        <svg className="w-4 h-4 lg:w-5 lg:h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        <span className="text-sm lg:text-base font-semibold text-blue-800">Guest Checkout Available</span>
-                                    </div>
-                                    <p className="text-xs lg:text-sm text-blue-700">
-                                        No account required! Complete your purchase as a guest.
-                                    </p>
-                                </div>
+
 
                                 {/* Checkout Button */}
                                 <button 
@@ -276,10 +277,10 @@ export default function Cart() {
                                     <span>Secure Checkout</span>
                                 </div>
                             </div>
-                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
         </div>
-    );
+  );
 }

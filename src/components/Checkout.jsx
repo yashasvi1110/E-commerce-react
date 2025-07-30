@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import Back from './common/Back'
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LastMinuteBuy from './LastMinuteBuy';
@@ -16,7 +15,7 @@ const Checkout = () => {
     const orderSummaryRef = useRef(null);
     
     // API URL for backend calls
-    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
     
     // Authentication state
     const [userAddresses, setUserAddresses] = useState([]);
@@ -27,7 +26,7 @@ const Checkout = () => {
 
     // Form state
     const [form, setForm] = useState({
-        firstName: '', lastName: '', company: '', address: '', city: '', country: '', zip: '', mobile: '', email: '', notes: '', upi: ''
+        firstName: '', lastName: '', address: '', city: '', country: '', zip: '', mobile: '', email: '', notes: '', upi: ''
     });
     
     const [newAddressForm, setNewAddressForm] = useState({
@@ -43,6 +42,158 @@ const Checkout = () => {
 
     const [placingOrder, setPlacingOrder] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
+
+    // Company address and distance calculation
+    const companyAddress = {
+        name: 'Bhutani Alphatum',
+        address: 'Bhutani Alphatum, Sector 90, Noida, Uttar Pradesh 201305, India',
+        coordinates: {
+            lat: 28.6139, // Noida coordinates (approximate)
+            lng: 77.2090
+        }
+    };
+    
+    const [deliveryDistance, setDeliveryDistance] = useState(null);
+    const [deliveryFee, setDeliveryFee] = useState(0);
+    const [estimatedDeliveryTime, setEstimatedDeliveryTime] = useState('');
+
+    // Calculate distance between two coordinates using Haversine formula
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+        const R = 6371; // Radius of the Earth in kilometers
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distance = R * c; // Distance in kilometers
+        return distance;
+    };
+
+    // Calculate delivery fee based on distance
+    const calculateDeliveryFee = (distance) => {
+        if (distance <= 5) {
+            return 10;
+        } else if (distance <= 10) {
+            return 20;
+        } else if (distance <= 15) {
+            return 30;
+        } else if (distance <= 20) {
+            return 40;
+        } else if (distance <= 25) {
+            return 50;
+        } else if (distance <= 30) {
+            return 60;
+        } else {
+            return 75; // For distances above 30km
+        }
+    };
+
+    // Get coordinates from address using Geocoding API
+    const getCoordinatesFromAddress = async (address) => {
+        try {
+            // For demo purposes, we'll use a simple mapping of common areas
+            // In a real app, you would use Google Maps Geocoding API or similar
+            const addressLower = address.toLowerCase();
+            
+            // Mock coordinates for common areas in Noida/Delhi NCR
+            const areaCoordinates = {
+                'noida': { lat: 28.5355, lng: 77.3910 },
+                'delhi': { lat: 28.7041, lng: 77.1025 },
+                'gurgaon': { lat: 28.4595, lng: 77.0266 },
+                'ghaziabad': { lat: 28.6692, lng: 77.4538 },
+                'faridabad': { lat: 28.4089, lng: 77.3178 },
+                'greater noida': { lat: 28.4744, lng: 77.5040 },
+                'sector 90': { lat: 28.6139, lng: 77.2090 },
+                'sector 62': { lat: 28.6274, lng: 77.3769 },
+                'sector 63': { lat: 28.6289, lng: 77.3745 },
+                'sector 64': { lat: 28.6304, lng: 77.3721 },
+                'sector 65': { lat: 28.6319, lng: 77.3697 },
+                'sector 66': { lat: 28.6334, lng: 77.3673 },
+                'sector 67': { lat: 28.6349, lng: 77.3649 },
+                'sector 68': { lat: 28.6364, lng: 77.3625 },
+                'sector 69': { lat: 28.6379, lng: 77.3601 },
+                'sector 70': { lat: 28.6394, lng: 77.3577 },
+                'sector 71': { lat: 28.6409, lng: 77.3553 },
+                'sector 72': { lat: 28.6424, lng: 77.3529 },
+                'sector 73': { lat: 28.6439, lng: 77.3505 },
+                'sector 74': { lat: 28.6454, lng: 77.3481 },
+                'sector 75': { lat: 28.6469, lng: 77.3457 },
+                'sector 76': { lat: 28.6484, lng: 77.3433 },
+                'sector 77': { lat: 28.6499, lng: 77.3409 },
+                'sector 78': { lat: 28.6514, lng: 77.3385 },
+                'sector 79': { lat: 28.6529, lng: 77.3361 },
+                'sector 80': { lat: 28.6544, lng: 77.3337 },
+                'sector 81': { lat: 28.6559, lng: 77.3313 },
+                'sector 82': { lat: 28.6574, lng: 77.3289 },
+                'sector 83': { lat: 28.6589, lng: 77.3265 },
+                'sector 84': { lat: 28.6604, lng: 77.3241 },
+                'sector 85': { lat: 28.6619, lng: 77.3217 },
+                'sector 86': { lat: 28.6634, lng: 77.3193 },
+                'sector 87': { lat: 28.6649, lng: 77.3169 },
+                'sector 88': { lat: 28.6664, lng: 77.3145 },
+                'sector 89': { lat: 28.6679, lng: 77.3121 },
+                'sector 90': { lat: 28.6694, lng: 77.3097 },
+                'sector 91': { lat: 28.6709, lng: 77.3073 },
+                'sector 92': { lat: 28.6724, lng: 77.3049 },
+                'sector 93': { lat: 28.6739, lng: 77.3025 },
+                'sector 94': { lat: 28.6754, lng: 77.3001 },
+                'sector 95': { lat: 28.6769, lng: 77.2977 },
+                'sector 96': { lat: 28.6784, lng: 77.2953 },
+                'sector 97': { lat: 28.6799, lng: 77.2929 },
+                'sector 98': { lat: 28.6814, lng: 77.2905 },
+                'sector 99': { lat: 28.6829, lng: 77.2881 },
+                'sector 100': { lat: 28.6844, lng: 77.2857 }
+            };
+
+            // Check for exact matches first
+            for (const [area, coords] of Object.entries(areaCoordinates)) {
+                if (addressLower.includes(area)) {
+                    return coords;
+                }
+            }
+
+            // If no exact match, return default Noida coordinates
+            return { lat: 28.5355, lng: 77.3910 };
+        } catch (error) {
+            console.error('Error getting coordinates:', error);
+            // Return default coordinates if geocoding fails
+            return { lat: 28.5355, lng: 77.3910 };
+        }
+    };
+
+    // Calculate delivery details when address changes
+    const calculateDeliveryDetails = async (address, city) => {
+        if (!address || !city) {
+            setDeliveryDistance(null);
+            setDeliveryFee(0);
+            setEstimatedDeliveryTime('');
+            return;
+        }
+
+        try {
+            const deliveryCoords = await getCoordinatesFromAddress(`${address}, ${city}`);
+            const distance = calculateDistance(
+                companyAddress.coordinates.lat,
+                companyAddress.coordinates.lng,
+                deliveryCoords.lat,
+                deliveryCoords.lng
+            );
+            
+            const fee = calculateDeliveryFee(distance);
+            const deliveryTime = Math.ceil(distance / 10) + 1; // Rough estimate: 10km/hour + 1 hour processing
+            
+            setDeliveryDistance(distance);
+            setDeliveryFee(fee);
+            setEstimatedDeliveryTime(`${deliveryTime} hour${deliveryTime > 1 ? 's' : ''}`);
+        } catch (error) {
+            console.error('Error calculating delivery details:', error);
+            setDeliveryDistance(null);
+            setDeliveryFee(0);
+            setEstimatedDeliveryTime('');
+        }
+    };
 
     const checkAuthentication = useCallback(async () => {
         const token = localStorage.getItem('token');
@@ -62,7 +213,6 @@ const Checkout = () => {
                     setForm({
                         firstName: userData.firstName || '',
                         lastName: userData.lastName || '',
-                        company: '',
                         address: '',
                         city: '',
                         country: '',
@@ -95,6 +245,13 @@ const Checkout = () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }, [location]);
+
+    // Calculate delivery details when address or city changes
+    useEffect(() => {
+        if (form.address && form.city) {
+            calculateDeliveryDetails(form.address, form.city);
+        }
+    }, [form.address, form.city]);
 
     const fillFormWithAddress = useCallback((address) => {
         setForm({
@@ -160,6 +317,14 @@ const Checkout = () => {
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+        
+        // Trigger delivery calculation for address and city changes
+        if (e.target.name === 'address' || e.target.name === 'city') {
+            const newForm = { ...form, [e.target.name]: e.target.value };
+            if (newForm.address && newForm.city) {
+                calculateDeliveryDetails(newForm.address, newForm.city);
+            }
+        }
     };
 
     const handlePaymentChange = (e) => {
@@ -169,10 +334,15 @@ const Checkout = () => {
     const handlePlaceOrder = async () => {
         console.log('🛒 Placing order...');
         
-        // Guest checkout is allowed - no authentication required
+        // Require authentication for checkout
+        if (!isAuthenticated) {
+            alert('Please login or create an account to place an order.');
+            navigate('/login');
+            return;
+        }
 
-        if ((paymentMethod === 'Paypal' || paymentMethod === 'Direct Bank Transfer') && !form.upi) {
-            alert('Please enter your UPI ID for the selected payment method.');
+        if (paymentMethod === 'UPI' && !form.upi) {
+            alert('Please enter your UPI ID for UPI payment.');
             return;
         }
 
@@ -186,6 +356,48 @@ const Checkout = () => {
             
             console.log('✅ Order placed successfully (simulated)');
             
+            // Create order object
+            const orderData = {
+                orderId: fakeOrderId,
+                placedAt: Date.now(),
+                orderTotal: (total + (deliveryDistance !== null ? deliveryFee : 3)).toFixed(2),
+                paymentMethod: paymentMethod,
+                status: 'Processing',
+                items: items.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    img: item.img,
+                    quantity: item.quantity
+                })),
+                deliveryAddress: `${form.address}, ${form.city}, ${form.country} ${form.zip}`,
+                customerInfo: {
+                    firstName: form.firstName,
+                    lastName: form.lastName,
+                    email: form.email,
+                    mobile: form.mobile
+                },
+                notes: form.notes,
+                upi: form.upi,
+                deliveryDetails: {
+                    distance: deliveryDistance,
+                    fee: deliveryDistance !== null ? deliveryFee : 3,
+                    estimatedTime: estimatedDeliveryTime,
+                    fromAddress: companyAddress.address
+                }
+            };
+
+            // Get subscription info if available
+            const subscriptionInfo = sessionStorage.getItem('subscriptionInfo');
+            if (subscriptionInfo) {
+                orderData.subscriptionInfo = JSON.parse(subscriptionInfo);
+            }
+
+            // Save order to localStorage
+            const existingOrders = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+            existingOrders.unshift(orderData); // Add new order at the beginning
+            localStorage.setItem('orderHistory', JSON.stringify(existingOrders));
+            
             // Clear the cart
             dispatch(clearCart());
             
@@ -193,7 +405,6 @@ const Checkout = () => {
             setForm({ 
                 firstName: '', 
                 lastName: '', 
-                company: '', 
                 address: '', 
                 city: '', 
                 country: '', 
@@ -209,7 +420,7 @@ const Checkout = () => {
                 state: { 
                     orderId: fakeOrderId, 
                     placedAt: Date.now(),
-                    orderTotal: (total + 3).toFixed(2),
+                    orderTotal: (total + (deliveryDistance !== null ? deliveryFee : 3)).toFixed(2),
                     paymentMethod: paymentMethod
                 } 
             });
@@ -219,8 +430,6 @@ const Checkout = () => {
     };
 
     // Removed unused function
-
-    const showUpi = paymentMethod === 'Paypal' || paymentMethod === 'Direct Bank Transfer';
 
     if (loading) {
         return (
@@ -233,28 +442,40 @@ const Checkout = () => {
         );
     }
 
-    // Guest checkout banner - show when not authenticated
-    const GuestCheckoutBanner = () => (
-        <div className="mx-3 sm:mx-8 lg:mx-16 mt-16 lg:mt-20 mb-4">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 lg:p-4">
-                <div className="flex items-center justify-center space-x-2">
-                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span className="text-sm lg:text-base font-medium text-blue-800">
-                        🎉 Guest Checkout Available! No account required to complete your purchase.
-                    </span>
-                </div>
-            </div>
-        </div>
-    );
 
-    return (
+
+        return (
         <div>
-            <Back title='Checkout'/>
             
-            {/* Guest Checkout Banner - show when not authenticated */}
-            {!isAuthenticated && <GuestCheckoutBanner />}
+            {/* Login Required Banner - show when not authenticated */}
+            {!isAuthenticated && (
+                <div className="mx-3 sm:mx-8 lg:mx-16 mt-16 lg:mt-20 mb-4">
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 lg:p-4">
+                        <div className="flex items-center justify-center space-x-2">
+                            <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            <span className="text-sm lg:text-base font-medium text-orange-800">
+                                🔐 Login Required! Please sign in or create an account to place your order.
+                            </span>
+                        </div>
+                        <div className="flex justify-center mt-3 space-x-3">
+                            <button 
+                                onClick={() => navigate('/login')}
+                                className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 text-sm font-medium"
+                            >
+                                Sign In
+                            </button>
+                            <button 
+                                onClick={() => navigate('/signup')}
+                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
+                            >
+                                Create Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             
             {/* Subscription Banner */}
             {location.state && location.state.fromSubscription && (
@@ -267,9 +488,9 @@ const Checkout = () => {
                             <span className="text-sm lg:text-base font-medium text-green-800">
                                 Subscription Setup Complete! Please fill in your billing details below.
                             </span>
-                        </div>
                     </div>
                 </div>
+            </div>
             )}
             
             <div className='mx-3 sm:mx-8 lg:mx-16'>
@@ -434,35 +655,32 @@ const Checkout = () => {
                 <div className='lg:flex lg:justify-between lg:space-x-8'>
                     <form className='lg:w-1/2 lg:pr-4' action="#" style={{color: '#45595b'}} onSubmit={e => e.preventDefault()}>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
+                        <div>
                                 <label className="block text-sm font-medium mb-1">First Name<sup className='text-red-500'>*</sup></label>
                                 <input name="firstName" value={form.firstName} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
-                            </div>
-                            <div>
+                        </div>
+                        <div>
                                 <label className="block text-sm font-medium mb-1">Last Name<sup className='text-red-500'>*</sup></label>
                                 <input name="lastName" value={form.lastName} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
-                            </div>
-                            <div className="sm:col-span-2">
-                                <label className="block text-sm font-medium mb-1">Company Name</label>
-                                <input name="company" value={form.company} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" />
-                            </div>
+                        </div>
+
                             <div className="sm:col-span-2">
                                 <label className="block text-sm font-medium mb-1">Address<sup className='text-red-500'>*</sup></label>
                                 <input name="address" value={form.address} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" placeholder='House Number Street Name' required />
-                            </div>
-                            <div>
+                        </div>
+                        <div>
                                 <label className="block text-sm font-medium mb-1">Town/City<sup className='text-red-500'>*</sup></label>
                                 <input name="city" value={form.city} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
-                            </div>
-                            <div>
+                        </div>
+                        <div>
                                 <label className="block text-sm font-medium mb-1">Country<sup className='text-red-500'>*</sup></label>
                                 <input name="country" value={form.country} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
-                            </div>
-                            <div>
+                        </div>
+                        <div>
                                 <label className="block text-sm font-medium mb-1">Postcode/Zip<sup className='text-red-500'>*</sup></label>
                                 <input name="zip" value={form.zip} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
-                            </div>
-                            <div>
+                        </div>
+                        <div>
                                 <label className="block text-sm font-medium mb-1">Mobile<sup className='text-red-500'>*</sup></label>
                                 <input name="mobile" value={form.mobile} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" required />
                             </div>
@@ -480,6 +698,10 @@ const Checkout = () => {
                                     <span className="text-sm">Cash on Delivery</span>
                                 </label>
                                 <label className="flex items-center">
+                                    <input type="radio" name="paymentMethod" value="UPI" checked={paymentMethod === 'UPI'} onChange={handlePaymentChange} className="mr-2"/>
+                                    <span className="text-sm">UPI Payment</span>
+                                </label>
+                                <label className="flex items-center">
                                     <input type="radio" name="paymentMethod" value="Paypal" checked={paymentMethod === 'Paypal'} onChange={handlePaymentChange} className="mr-2"/>
                                     <span className="text-sm">Paypal</span>
                                 </label>
@@ -488,10 +710,11 @@ const Checkout = () => {
                                     <span className="text-sm">Direct Bank Transfer</span>
                                 </label>
                             </div>
-                            {showUpi && (
+                            {paymentMethod === 'UPI' && (
                                 <div className="mt-3">
-                                    <label className="block text-sm font-medium mb-1">UPI ID:</label>
-                                    <input name="upi" value={form.upi} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" placeholder='Paste your UPI ID here' required={showUpi} />
+                                    <label className="block text-sm font-medium mb-1">UPI ID<sup className='text-red-500'>*</sup></label>
+                                    <input name="upi" value={form.upi} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' type="text" placeholder='Enter your UPI ID (e.g., name@upi)' required />
+                                    <p className="text-xs text-gray-500 mt-1">Example: john.doe@okicici, 9876543210@paytm</p>
                                 </div>
                             )}
                         </div>
@@ -501,7 +724,7 @@ const Checkout = () => {
                             <textarea name="notes" value={form.notes} onChange={handleChange} className='w-full border border-gray-300 outline-green-300 rounded-lg px-3 py-2 text-sm' rows="4" placeholder='Any special instructions...'></textarea>
                         </div>
                     </form>
-
+                    
                     <div className="lg:w-1/2 lg:pl-4 mt-8 lg:mt-0">
                         {/* Last Minute Buy - Mobile Optimized */}
                         <div className="mb-4">
@@ -559,33 +782,53 @@ const Checkout = () => {
                                         <span className="text-gray-600">Subtotal ({items.length} items)</span>
                                         <span className="font-semibold">₹{subtotal.toFixed(2)}</span>
                                     </div>
+                                    
+                                    {/* Delivery Information */}
+                                    {deliveryDistance !== null && (
+                                        <div className="bg-blue-50 rounded-lg p-3 mb-3">
+                                            <div className="flex items-center space-x-2 mb-2">
+                                                <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                </svg>
+                                                <span className="text-sm font-medium text-blue-800">Delivery Details</span>
+                                            </div>
+                                            <div className="space-y-1 text-xs text-blue-700">
+                                                <div className="flex justify-between">
+                                                    <span>Distance:</span>
+                                                    <span>{deliveryDistance.toFixed(1)} km</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span>From:</span>
+                                                    <span className="text-right">{companyAddress.name}</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span>Est. Time:</span>
+                                                    <span>{estimatedDeliveryTime}</span>
+                                </div>
+                            </div>
+                        </div>
+                                    )}
+                                    
                                     <div className="flex justify-between text-sm lg:text-base">
                                         <span className="text-gray-600">Delivery Fee</span>
-                                        <span className="text-green-600 font-semibold">₹3.00</span>
+                                        <span className="text-green-600 font-semibold">
+                                            {deliveryDistance !== null ? `₹${deliveryFee.toFixed(2)}` : '₹3.00'}
+                                        </span>
                                     </div>
                                     <hr className="border-gray-200" />
                                     <div className="flex justify-between text-base lg:text-lg font-bold text-gray-800">
                                         <span>Total</span>
-                                        <span>₹{(total + 3).toFixed(2)}</span>
+                                        <span>₹{(total + (deliveryDistance !== null ? deliveryFee : 3)).toFixed(2)}</span>
                                     </div>
-                                </div>
+                        </div>
 
-                                {/* Guest Checkout Note */}
-                                {!isAuthenticated && (
-                                    <div className="bg-blue-50 rounded-lg p-3 mb-4 border border-blue-200">
-                                        <div className="flex items-center space-x-2">
-                                            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            <span className="text-sm font-medium text-blue-800">Guest Checkout - No account needed!</span>
-                                        </div>
-                                    </div>
-                                )}
+
 
                                 {/* Place Order Button - Mobile optimized */}
-                                <button 
-                                    onClick={handlePlaceOrder} 
-                                    disabled={placingOrder} 
+                            <button 
+                                onClick={handlePlaceOrder} 
+                                disabled={placingOrder} 
                                     className={`w-full py-3 lg:py-4 px-4 rounded-lg font-semibold text-sm lg:text-base transition duration-200 ${
                                         placingOrder 
                                             ? 'bg-gray-400 cursor-not-allowed' 
@@ -600,14 +843,9 @@ const Checkout = () => {
                                     ) : (
                                         <div className="flex items-center justify-center space-x-2">
                                             <span>Place Order</span>
-                                            {!isAuthenticated && (
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                            )}
                                         </div>
                                     )}
-                                </button>
+                            </button>
                             </div>
                         </div>
 

@@ -7,9 +7,13 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.json());
 
 // Database connection
@@ -236,35 +240,7 @@ app.post('/api/auth/login', async (req, res) => {
             return res.status(400).json({ message: 'Email and password are required' });
         }
 
-        // Mock login for development (no database required)
-        // In production, you would use the database connection below
-        if (email === 'test@example.com' && password === 'password123') {
-            const mockUser = {
-                id: 1,
-                first_name: 'Test',
-                last_name: 'User',
-                email: email,
-                phone: '+1234567890',
-                created_at: new Date().toISOString()
-            };
-
-            // Generate JWT token
-            const token = jwt.sign(
-                { userId: mockUser.id, email: mockUser.email },
-                JWT_SECRET,
-                { expiresIn: '24h' }
-            );
-
-            res.json({
-                message: 'Login successful',
-                token,
-                user: mockUser
-            });
-        } else {
-            return res.status(401).json({ message: 'Invalid email or password. Use test@example.com / password123' });
-        }
-
-        /* Uncomment this section when database is set up
+        // Database authentication
         const connection = await pool.getConnection();
 
         // Find user by email
@@ -303,7 +279,6 @@ app.post('/api/auth/login', async (req, res) => {
             token,
             user
         });
-        */
 
     } catch (error) {
         console.error('Login error:', error);
@@ -594,6 +569,59 @@ app.get('/api/orders', authenticateToken, async (req, res) => {
 
     } catch (error) {
         console.error('Get orders error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// Save billing information
+app.post('/api/user/billing', authenticateToken, async (req, res) => {
+    try {
+        const { billingAddress, paymentMethod } = req.body;
+        const userId = req.user.userId;
+
+        const connection = await pool.getConnection();
+
+        // Save billing address
+        const [addressResult] = await connection.execute(
+            `INSERT INTO user_addresses 
+            (user_id, address_type, address_line1, address_line2, city, state, country, zip_code, is_default) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                userId,
+                'billing',
+                billingAddress.addressLine1,
+                billingAddress.addressLine2 || null,
+                billingAddress.city,
+                billingAddress.state,
+                billingAddress.country,
+                billingAddress.zipCode,
+                true // Set as default billing address
+            ]
+        );
+
+        // Update user information
+        await connection.execute(
+            `UPDATE users 
+             SET first_name = ?, last_name = ?, phone = ?, email = ?
+             WHERE id = ?`,
+            [
+                billingAddress.firstName,
+                billingAddress.lastName,
+                billingAddress.phone,
+                billingAddress.email,
+                userId
+            ]
+        );
+
+        connection.release();
+
+        res.status(200).json({
+            message: 'Billing information saved successfully',
+            addressId: addressResult.insertId
+        });
+
+    } catch (error) {
+        console.error('Save billing error:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });

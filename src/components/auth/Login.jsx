@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 // Removed unused import
 
 const Login = () => {
@@ -10,9 +11,25 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
     
     const navigate = useNavigate();
+    const { login } = useAuth();
     // Removed unused dispatch
+
+    // Load remembered credentials on component mount
+    useEffect(() => {
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        const rememberMeStatus = localStorage.getItem('rememberMe');
+        
+        if (rememberedEmail && rememberMeStatus === 'true') {
+            setFormData(prev => ({
+                ...prev,
+                email: rememberedEmail
+            }));
+            setRememberMe(true);
+        }
+    }, []);
 
     const handleChange = (e) => {
         setFormData({
@@ -56,7 +73,7 @@ const Login = () => {
         setLoading(true);
         
         try {
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
         const response = await fetch(`${apiUrl}/api/auth/login`, {
                 method: 'POST',
                 headers: {
@@ -68,12 +85,17 @@ const Login = () => {
             const data = await response.json();
             
             if (response.ok) {
-                // Store token in localStorage
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
+                // Use auth context to login
+                login(data.user, data.token);
                 
-                // Update Redux state if needed
-                // dispatch(loginUser(data.user));
+                // If remember me is checked, store credentials
+                if (rememberMe) {
+                    localStorage.setItem('rememberedEmail', formData.email);
+                    localStorage.setItem('rememberMe', 'true');
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                    localStorage.removeItem('rememberMe');
+                }
                 
                 // Redirect to checkout or home
                 navigate('/checkout');
@@ -165,6 +187,8 @@ const Login = () => {
                                     id="remember-me"
                                     name="remember-me"
                                     type="checkbox"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
                                     className="h-4 w-4 text-[#81c408] focus:ring-[#81c408] border-gray-300 rounded"
                                 />
                                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">

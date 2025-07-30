@@ -52,14 +52,14 @@ const SearchResults = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-gray-50 py-4 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Search Header */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Search Results</h1>
+        <div className="bg-white rounded-xl shadow-sm p-4 mb-4">
+          <h1 className="text-2xl font-bold text-gray-800 mb-3">Search Results</h1>
           
           {/* Search Bar */}
-          <form className="flex items-center bg-white border-2 border-orange-400 rounded-full shadow-sm mb-4 px-2 py-1 max-w-md" onSubmit={handleNewSearch}>
+          <form className="flex items-center bg-white border-2 border-orange-400 rounded-full shadow-sm mb-3 px-2 py-1 max-w-md" onSubmit={handleNewSearch}>
             <input
               className="flex-1 bg-transparent border-none outline-none pl-2 py-2 text-sm text-gray-700 placeholder-gray-400 rounded-full"
               type="text"
@@ -88,7 +88,7 @@ const SearchResults = () => {
 
         {/* Search Results */}
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 gap-x-2 gap-y-4 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-2 gap-y-3 md:grid-cols-3 lg:grid-cols-4">
             {filteredProducts.map(product => (
               <div
                 key={product.id}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import OrderHistory from './OrderHistory';
 
 const UserProfile = () => {
@@ -22,12 +22,20 @@ const UserProfile = () => {
     });
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         fetchUserProfile();
         fetchUserAddresses();
+        
+        // Check URL parameters for tab selection
+        const urlParams = new URLSearchParams(location.search);
+        const tabParam = urlParams.get('tab');
+        if (tabParam === 'orders') {
+            setActiveTab('orders');
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [location.search]);
 
     const fetchUserProfile = async () => {
         try {
@@ -37,7 +45,7 @@ const UserProfile = () => {
                 return;
             }
 
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
             const response = await fetch(`${apiUrl}/api/user/profile`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -62,7 +70,7 @@ const UserProfile = () => {
     const fetchUserAddresses = async () => {
         try {
             const token = localStorage.getItem('token');
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
             const response = await fetch(`${apiUrl}/api/user/addresses`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -90,7 +98,7 @@ const UserProfile = () => {
         
         try {
             const token = localStorage.getItem('token');
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
             const response = await fetch(`${apiUrl}/api/user/addresses`, {
                 method: 'POST',
                 headers: {
@@ -124,7 +132,7 @@ const UserProfile = () => {
         
         try {
             const token = localStorage.getItem('token');
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
             const response = await fetch(`${apiUrl}/api/user/addresses/${editingAddress.id}`, {
                 method: 'PUT',
                 headers: {

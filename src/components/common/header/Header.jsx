@@ -2,10 +2,17 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useSelector } from 'react-redux';
+import { useAuth } from '../../../context/AuthContext';
 
 const Header = () => {
     const [bar, setBar] = useState(false);
     const totalItems = useSelector(state => state.cart.totalItems);
+    const { isAuthenticated, logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        setBar(false);
+    };
     return (
         <div>
             <div className='md:container md:mx-auto flex items-center justify-between m-6 sticky z-10 relative'>
@@ -35,10 +42,21 @@ const Header = () => {
                             {totalItems > 0 && <span className='ml-2 bg-[#81c408] text-white rounded-full px-2 py-0.5 text-xs'>{totalItems}</span>}
                         </Link>
                         <Link to='/checkout' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-credit-card mr-2"></i>Checkout</Link>
+                         <Link to='/profile?tab=orders' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-history mr-2"></i>Order History</Link>
                         <Link to='/testimonial' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-comment mr-2"></i>Testimonial</Link>
                         <Link to='/contact' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-envelope mr-2"></i>Contact</Link>
                         <Link to='/admin/inventory' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-boxes mr-2"></i>Inventory</Link>
-                        <Link to='/profile' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-user mr-2"></i>Profile</Link>
+                        {isAuthenticated ? (
+                            <>
+                                <Link to='/profile' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-user mr-2"></i>Profile</Link>
+                                <button onClick={handleLogout} className='text-lg font-semibold text-red-600 mb-2 w-full text-left'><i className="fa fa-sign-out mr-2"></i>Logout</button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to='/login' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-sign-in mr-2"></i>Login</Link>
+                                <Link to='/signup' className='text-lg font-semibold text-gray-700 mb-2' onClick={()=> setBar(false)}><i className="fa fa-user-plus mr-2"></i>Sign Up</Link>
+                            </>
+                        )}
                     </div>
                     {/* Click outside to close */}
                     <div className="flex-1" onClick={()=> setBar(false)}></div>

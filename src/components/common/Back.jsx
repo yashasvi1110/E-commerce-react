@@ -5,6 +5,29 @@ const Back = ({title}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const isHome = location.pathname === '/';
+    
+    const handleBackClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Back button clicked, current path:', location.pathname);
+        
+        // // Test alert to confirm button is working
+        // alert('Back button clicked! Redirecting to home...');
+        
+        // For checkout and billing pages, always redirect to home
+        if (location.pathname === '/checkout' || location.pathname === '/billing') {
+            console.log('Redirecting to home page');
+            navigate('/');
+        } else {
+            // For other pages, try to go back in history, fallback to home
+            if (window.history.length > 1) {
+                navigate(-1);
+            } else {
+                navigate('/');
+            }
+        }
+    };
+    
     return (
         <>
             <section className="back">
@@ -12,9 +35,10 @@ const Back = ({title}) => {
                 {/* Back button, hidden on home page */}
                 {!isHome && (
                     <button
-                        onClick={() => navigate(-1)}
-                        className="absolute left-4 top-4 bg-white border border-gray-300 rounded-full shadow px-3 py-1 text-sm font-semibold text-[#81c408] hover:bg-[#81c408] hover:text-white transition z-10"
+                        onClick={handleBackClick}
+                        className="absolute left-4 top-4 bg-white border-2 border-[#81c408] rounded-full shadow-lg px-4 py-2 text-sm font-bold text-[#81c408] hover:bg-[#81c408] hover:text-white transition-all duration-200 z-50 cursor-pointer"
                         aria-label="Go back"
+                        style={{ zIndex: 9999, position: 'fixed' }}
                     >
                         <i className="fa fa-arrow-left mr-2"></i>Back
                     </button>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Signup = () => {
     const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const Signup = () => {
     const [signupError, setSignupError] = useState('');
     
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleChange = (e) => {
         setFormData({
@@ -78,7 +80,7 @@ const Signup = () => {
         setLoading(true);
         
         try {
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
         const response = await fetch(`${apiUrl}/api/auth/signup`, {
                 method: 'POST',
                 headers: {
@@ -96,12 +98,11 @@ const Signup = () => {
             const data = await response.json();
             
             if (response.ok) {
-                // Store token in localStorage
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
+                // Use auth context to login
+                login(data.user, data.token);
                 
-                // Redirect to checkout or profile setup
-                navigate('/checkout');
+                // Redirect to billing page for new account setup
+                navigate('/billing');
             } else {
                 setSignupError(data.message || 'Signup failed');
             }

@@ -25,10 +25,10 @@ const Footer = ({ hideSubscribe }) => {
                 </div>
                 {/* Quick Links */}
                 <div className='flex gap-6 text-gray-200 text-sm'>
-                    <span className='hover:text-[#81c408] cursor-pointer'>About</span>
-                    <span className='hover:text-[#81c408] cursor-pointer'>Contact</span>
-                    <span className='hover:text-[#81c408] cursor-pointer'>Privacy</span>
-                    <span className='hover:text-[#81c408] cursor-pointer'>Terms</span>
+                    <button className='hover:text-[#81c408] cursor-pointer bg-transparent border-none'>About</button>
+                    <button className='hover:text-[#81c408] cursor-pointer bg-transparent border-none'>Contact</button>
+                    <button className='hover:text-[#81c408] cursor-pointer bg-transparent border-none'>Privacy</button>
+                    <button className='hover:text-[#81c408] cursor-pointer bg-transparent border-none'>Terms</button>
                 </div>
                 {/* Copyright */}
                 <div className='text-center text-xs text-gray-300 border-t border-gray-500 pt-3 w-full'>

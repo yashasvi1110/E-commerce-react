@@ -7,7 +7,7 @@ const Contact = () => {
             <Back title='Contact'/>
             <div className='m-auto text-center bg-gray-100 py-10 px-6 mx-4 rounded-lg sm:mx-20 md:mx-28'>
                 <h1 className='text-3xl lg:text-5xl font-semibold' style={{color: '#81c408'}}>Get in touch</h1>
-                <p className='my-4 w-10/12 text-center m-auto' style={{color: '#45595b'}}>The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done.<button className='ml-1 bg-transparent border-none text-[#81c408] cursor-pointer hover:underline'>Download Now.</button></p>
+                <p className='my-4 w-10/12 text-center m-auto' style={{color: '#45595b'}}>The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <button className='ml-1 bg-transparent border-none text-[#81c408] cursor-pointer hover:underline'>Download Now.</button></p>
                 <div className=" rounded w-10/12 h-96 mx-auto my-8">
                     <iframe className="rounded w-full h-full"
                     title="Google Maps - New York Location"

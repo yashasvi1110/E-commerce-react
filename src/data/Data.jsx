@@ -326,5 +326,32 @@ export const shop_feature = [
 ]
 
 // Use JSON data instead of generated data
-export const categories = productData.categories;
 export const products = productData.products;
+
+// Define categories data
+export const categories = [
+    {
+        id: 'fruits',
+        name: 'Fruits',
+        img: '../img/fruite-item-1.jpg',
+        type: 'regular'
+    },
+    {
+        id: 'vegetables',
+        name: 'Vegetables',
+        img: '../img/vegetable-item-1.jpg',
+        type: 'regular'
+    },
+    {
+        id: 'bestseller',
+        name: 'Best Seller',
+        img: '../img/fruite-item-2.jpg',
+        type: 'special'
+    },
+    {
+        id: 'lightning',
+        name: 'Lightning Deals',
+        img: '../img/fruite-item-3.jpg',
+        type: 'special'
+    }
+];

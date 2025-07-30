@@ -26,6 +26,10 @@ import OrderSuccess from '../OrderSuccess';
 import { useLocation } from 'react-router-dom';
 import InventoryManagement from '../admin/InventoryManagement';
 import Subscribe from '../subscribe';
+import CategoryDetail from './CategoryDetail';
+import FeaturedProductsDetail from './FeaturedProductsDetail';
+import Billing from '../Billing';
+import ProtectedRoute from '../common/ProtectedRoute';
 
 const PagesInner = () => {
     const location = useLocation();
@@ -48,11 +52,22 @@ const PagesInner = () => {
                     <Route path="/lightning-deals" element={<LightningDeals />}></Route>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/signup" element={<Signup />}></Route>
-                    <Route path="/profile" element={<UserProfile />}></Route>
+                    <Route path="/billing" element={
+                        <ProtectedRoute>
+                            <Billing />
+                        </ProtectedRoute>
+                    }></Route>
+                    <Route path="/profile" element={
+                        <ProtectedRoute>
+                            <UserProfile />
+                        </ProtectedRoute>
+                    }></Route>
                     <Route path="/admin/orders" element={<AdminOrders />} />
                     <Route path="/order-success" element={<OrderSuccess />} />
                     <Route path="/error" element={<Error />}></Route>
                     <Route path="/contact" element={<Contact />}></Route>
+                    <Route path="/category/:categoryId" element={<CategoryDetail />}></Route>
+                    <Route path="/featured-products" element={<FeaturedProductsDetail />}></Route>
                 </Routes>
             </main>
             <BottomCartBar />
